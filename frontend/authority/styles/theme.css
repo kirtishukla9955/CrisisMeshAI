@@ -1,0 +1,94 @@
+/**
+ * CrisisMesh AI — Authority Command Center design tokens.
+ *
+ * Design direction: an emergency-operations command console, not a generic
+ * admin panel. Base surface is a cool near-black (not pure #000, so glass
+ * panels have somewhere to catch light); the palette's real personality is
+ * in the semantic status/severity colors, since those need to be readable
+ * at a glance under stress — the brief itself calls for "emergency status
+ * colors used intentionally," so the signature move here is a restrained
+ * charcoal base built specifically to let those signal colors do the work,
+ * rather than a single decorative accent.
+ *
+ * Import this once at the authority dashboard's root (e.g. in
+ * AuthorityDashboard.jsx or the app's global stylesheet) alongside Tailwind.
+ */
+
+:root {
+  /* Surfaces */
+  --cm-bg-base: #0a0d10;       /* app background */
+  --cm-bg-panel: #10151a;      /* card/panel base */
+  --cm-bg-panel-raised: #151b21;
+  --cm-border: rgba(148, 163, 184, 0.12);
+  --cm-border-strong: rgba(148, 163, 184, 0.22);
+  --cm-glass: rgba(21, 27, 33, 0.72);
+
+  /* Typography */
+  --cm-text-primary: #E6EBF0;
+  --cm-text-secondary: #9AA7B2;
+  --cm-text-muted: #5C6773;
+  --cm-font-display: 'Space Grotesk', 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --cm-font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --cm-font-mono: 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Semantic — severity */
+  --cm-critical: #FB7185;
+  --cm-critical-bg: rgba(251, 113, 133, 0.14);
+  --cm-high: #FB923C;
+  --cm-high-bg: rgba(251, 146, 60, 0.12);
+  --cm-medium: #FCD34D;
+  --cm-medium-bg: rgba(252, 211, 77, 0.12);
+  --cm-low: #38BDF8;
+  --cm-low-bg: rgba(56, 189, 248, 0.12);
+
+  /* Semantic — system */
+  --cm-operational: #34D399;
+  --cm-warning: #FCD34D;
+  --cm-danger: #FB7185;
+  --cm-info: #7DD3FC;
+  --cm-ai-accent: #A78BFA; /* used only for AI-attributed content: badges, AI report sections */
+
+  --cm-radius-sm: 6px;
+  --cm-radius-md: 10px;
+  --cm-radius-lg: 16px;
+  --cm-shadow-panel: 0 1px 2px rgba(0,0,0,0.4), 0 8px 24px -8px rgba(0,0,0,0.5);
+}
+
+body {
+  background: var(--cm-bg-base);
+  color: var(--cm-text-primary);
+  font-family: var(--cm-font-body);
+}
+
+.cm-glass-panel {
+  background: var(--cm-glass);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--cm-radius-lg);
+  box-shadow: var(--cm-shadow-panel);
+}
+
+.cm-mono {
+  font-family: var(--cm-font-mono);
+  letter-spacing: 0.02em;
+}
+
+/* Live pulse indicator — the one recurring signature motif used sparingly:
+   next to "Systems Operational", on the live map badge, and on the AI
+   "analyzing" state. Not used decoratively elsewhere. */
+@keyframes cm-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.55); }
+  70%  { box-shadow: 0 0 0 8px rgba(52, 211, 153, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+}
+.cm-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cm-operational);
+  animation: cm-pulse 2.2s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cm-live-dot { animation: none; }
+}
