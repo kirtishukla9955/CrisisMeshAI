@@ -1,0 +1,35 @@
+// Firestore Security Rules — Member 4 snippet
+//
+// This is NOT a complete rules file. Merge this into the main project's
+// existing firestore.rules under the `match /databases/{database}/documents`
+// block. Do not overwrite Member 1/2/3's existing rules for `reports`,
+// volunteers, etc.
+//
+// Assumes authority accounts carry a custom claim `role: "authority"`,
+// matching backend/middleware/authMiddleware.js. Adjust the claim check if
+// the main project's auth flow differs.
+
+match /incidents/{incidentId} {
+  // Citizens and the app can read incidents (for the live map, Member 2's
+  // module) — adjust if the main project wants read access restricted.
+  allow read: if true;
+
+  // Only Member 3's backend service (via Admin SDK, which bypasses rules)
+  // or an authenticated authority may create/update top-level incident
+  // fields. Client-side writes to `status`, `authorityNote`, etc. should
+  // go through Member 4's Express API (PATCH /api/incidents/:id/status),
+  // not directly from the frontend — the API enforces status-transition
+  // validation that rules alone can't express cleanly.
+  allow write: if false; // all writes go through the backend (Admin SDK)
+
+  match /history/{eventId} {
+    // Audit trail is authority-readable, never client-writable.
+    allow read: if request.auth != null && request.auth.token.role == "authority";
+    allow write: if false; // written only by the backend via Admin SDK
+  }
+}
+
+match /postDisasterReports/{reportId} {
+  allow read: if request.auth != null && request.auth.token.role == "authority";
+  allow write: if false; // written only by the backend via Admin SDK
+}

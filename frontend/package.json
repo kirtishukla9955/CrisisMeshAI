@@ -1,0 +1,27 @@
+{
+  "name": "crisismesh-member4-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CrisisMesh AI — Member 4 frontend slice: Authority Dashboard (Command Center, Incident Details, Post-Disaster Intelligence). Intended to be merged into the main CrisisMesh React app, not run standalone.",
+  "main": "authority/pages/CommandCenterPage.jsx",
+  "scripts": {
+    "check": "esbuild authority/**/*.jsx authority/**/*.js --bundle=false --outfile=/dev/null"
+  },
+  "dependencies": {
+    "recharts": "^2.12.7"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "firebase": "^10.12.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.21.5"
+  },
+  "notes": [
+    "react, react-dom, and firebase are declared as peerDependencies, not dependencies: the main project already installs these (per the tech stack in the project brief), and installing a second copy here would risk two React instances in the same app.",
+    "recharts is the one genuinely new dependency this module introduces, for the severity/category/response-time charts.",
+    "Do not run `npm install` for this package in isolation as a way to launch a dev server — there is no build config (Vite/CRA) here by design. See ../INTEGRATION_GUIDE.md: these dependencies are meant to be merged into the main project's existing frontend package.json.",
+    "`npm run check` requires esbuild as a devDependency purely for the syntax-check script used during development of this package; the main project's own bundler (Vite/webpack/etc.) supersedes it once integrated."
+  ]
+}
