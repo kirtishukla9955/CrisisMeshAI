@@ -3,7 +3,7 @@
 // Kept as a plain component (not tied to react-leaflet) so it can also be
 // reused in a sidebar/detail panel later if the team wants that.
 
-import { getSeverityColor, getSeverityLabel } from "../../utils/severityColors";
+import { getSeverityColor, getSeverityLabel } from "../utils/severityColors";
 
 export default function ClusterPopup({ cluster }) {
   const {

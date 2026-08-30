@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet.heat";
-import { getHeatIntensity } from "../../utils/severityColors";
+import { getHeatIntensity } from "../utils/severityColors";
 
 export default function HeatmapLayer({ clusters = [], visible = true }) {
   const map = useMap();

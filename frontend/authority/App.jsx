@@ -6,59 +6,42 @@ import CrisisMap from "./components/CrisisMap";
 import MapFilters from "./components/MapFilters";
 import MapLegend from "./components/MapLegend";
 import { useClusteredIncidents } from "./hooks/useClusteredIncidents";
-import { AlertCircle } from "lucide-react";
-// frontend/authority/App.jsx
-import React from "react";
-import MapPage from "./pages/MapPage";
 
 function App() {
-  return (
-    <div className="App">
-      <MapPage />
-    </div>
-  );
-}
-
-
-
-function App() {
-  const [filters, setFilters] = useState({ type: "all", minSeverity: 0 });
-
-  // Poll backend for real-time incident clusters
+  // Change this line in App.jsx:
+  const [filters, setFilters] = useState({ 
+  type: "all", 
+  minSeverity: 0,
+  categories: [], // Add default arrays to prevent undefined crashes
+  tags: [] 
+  });
+  
   const { clusters, loading: mapLoading, error } = useClusteredIncidents();
 
   const handleFilterChange = (newFilters) => {
     setFilters((prev) => ({ ...prev, ...newFilters }));
   };
 
-  // Dynamic filter logic for map view
-  const filteredClusters = clusters.filter((inc) => {
+  const filteredClusters = clusters ? clusters.filter((inc) => {
     if (filters.type !== "all" && inc.type !== filters.type) return false;
     if (filters.minSeverity && inc.severity < filters.minSeverity) return false;
     return true;
-  });
+  }) : [];
 
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-100 overflow-hidden">
-      {/* Header */}
       <header className="w-full bg-white shadow-sm p-4 z-20 flex justify-between items-center border-b">
         <h1 className="text-xl font-bold text-gray-800">CrisisMesh AI — Incident Command</h1>
-        
         {error && (
           <span className="text-sm font-medium text-red-600 bg-red-100 px-3 py-1 rounded-full flex items-center">
-            <AlertCircle size={14} className="mr-1" />
-            Connection issue: Retrying live updates...
+            ⚠️ Connection issue: Retrying live updates...
           </span>
         )}
       </header>
 
-      {/* Main Map Content */}
       <main className="flex-1 relative w-full h-full overflow-hidden">
         <div className="relative w-full h-full">
-          <MapFilters 
-            filters={filters} 
-            onFilterChange={handleFilterChange} 
-          />
+          <MapFilters filters={filters} onFilterChange={handleFilterChange} />
           <CrisisMap incidents={filteredClusters} loading={mapLoading} />
           <MapLegend />
         </div>

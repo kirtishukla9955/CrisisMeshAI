@@ -4,7 +4,7 @@
 
 import { CircleMarker, Popup } from "react-leaflet";
 import ClusterPopup from "./ClusterPopup";
-import { getSeverityColor, getClusterRadius } from "../../utils/severityColors";
+import { getSeverityColor, getClusterRadius } from "../utils/severityColors";
 
 export default function IncidentMarker({ cluster, onSelect }) {
   const { lat, lng, severity = 0, reportCount = 1 } = cluster;

@@ -12,7 +12,7 @@ import HeatmapLayer from "./HeatmapLayer";
 import IncidentMarker from "./IncidentMarker";
 import MapLegend from "./MapLegend";
 import MapFilters, { DEFAULT_MAP_FILTERS } from "./MapFilters";
-import { useClusteredIncidents } from "../../hooks/useClusteredIncidents";
+import { useClusteredIncidents } from "../hooks/useClusteredIncidents";
 
 // Fallback center if there's no data yet — adjust to your deployment region.
 const DEFAULT_CENTER = [28.6139, 77.209]; // New Delhi
@@ -69,8 +69,7 @@ export default function CrisisMap() {
         ))}
       </MapContainer>
 
-      <MapFilters filters={filters} onChange={setFilters} />
-      <MapLegend />
+      
 
       <button
         onClick={() => setShowHeatmap((v) => !v)}

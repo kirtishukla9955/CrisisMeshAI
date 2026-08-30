@@ -3,7 +3,7 @@
 // Pulls directly from SEVERITY_BANDS so it can never drift out of sync
 // with the actual marker colors.
 
-import { SEVERITY_BANDS } from "../../utils/severityColors";
+import { SEVERITY_BANDS } from "../utils/severityColors";
 
 export default function MapLegend() {
   return (
