@@ -1,0 +1,24 @@
+{
+  "name": "crisismesh-member4-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CrisisMesh AI — Member 4 backend slice: Authority Dashboard API + Post-Disaster AI Agent. Intended to be merged into the main CrisisMesh Express server, not run standalone.",
+  "main": "routes/incidentRoutes.js",
+  "scripts": {
+    "check": "node ../scripts/validate.js",
+    "test": "node --test",
+    "seed:demo": "node ../demo/seed-data/seed.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "firebase-admin": "^12.3.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "notes": [
+    "Node >=18 is required because ai/postDisasterAgent/agent.js uses the global fetch() API instead of adding node-fetch as a dependency.",
+    "Do not run `npm install` for this package in isolation as a way to launch a server — there is no server entry file here by design. See ../INTEGRATION_GUIDE.md: these dependencies are meant to be merged into the main project's existing backend package.json.",
+    "If the main project's backend already declares express and/or firebase-admin, do not install a second, conflicting version — align on one version across the whole backend."
+  ]
+}

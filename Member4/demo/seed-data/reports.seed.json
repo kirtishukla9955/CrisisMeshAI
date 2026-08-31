@@ -1,0 +1,103 @@
+{
+  "_comment": "DEMO DATA ONLY — canonical Round 2 report shape (no incidentId FK; linked via incident.reportIds[]). createdAtMinutesAgo is resolved to a real timestamp by seed.js at load time so response-time demos are realistic.",
+  "reports": [
+    {
+      "reportId": "RPT-4001",
+      "source": "app",
+      "reporterId": "USR-100",
+      "reporterPhone": null,
+      "text": "Family of four trapped on second floor, water rising fast.",
+      "mediaUrls": [],
+      "location": { "lat": 26.9124, "lng": 75.7873 },
+      "locationText": "Near Ward 14 community hall, Jaipur",
+      "tag": "trapped",
+      "isEmergency": true,
+      "status": "new",
+      "createdAtMinutesAgo": 90
+    },
+    {
+      "reportId": "RPT-4002",
+      "source": "sms",
+      "reporterId": null,
+      "reporterPhone": "+91XXXXXXXX01",
+      "text": "Confirming trapped residents, heard shouting from rooftop.",
+      "mediaUrls": [],
+      "location": { "lat": 26.9126, "lng": 75.7875 },
+      "locationText": null,
+      "tag": "trapped",
+      "isEmergency": true,
+      "status": "new",
+      "createdAtMinutesAgo": 85
+    },
+    {
+      "reportId": "RPT-4003",
+      "source": "offline_sync",
+      "reporterId": "USR-101",
+      "reporterPhone": null,
+      "text": "Clinic flooded, patients need evacuation, low on supplies.",
+      "mediaUrls": [],
+      "location": { "lat": 26.9, "lng": 75.82 },
+      "locationText": "Sector 21 health clinic",
+      "tag": "medical",
+      "isEmergency": true,
+      "status": "new",
+      "createdAtMinutesAgo": 120
+    },
+    {
+      "reportId": "RPT-4004",
+      "source": "sms",
+      "reporterId": null,
+      "reporterPhone": "+91XXXXXXXX02",
+      "text": "No clean drinking water for 2 days in this ward.",
+      "mediaUrls": [],
+      "location": { "lat": 26.95, "lng": 75.79 },
+      "locationText": null,
+      "tag": "food_water",
+      "isEmergency": false,
+      "status": "new",
+      "createdAtMinutesAgo": 200
+    },
+    {
+      "reportId": "RPT-4005",
+      "source": "app",
+      "reporterId": "USR-102",
+      "reporterPhone": null,
+      "text": "Fallen tree blocking main road, no vehicles can pass.",
+      "mediaUrls": [],
+      "location": { "lat": 26.88, "lng": 75.75 },
+      "locationText": "Ward 14 main road",
+      "tag": "road_blocked",
+      "isEmergency": false,
+      "status": "new",
+      "createdAtMinutesAgo": 60
+    },
+    {
+      "reportId": "RPT-4006",
+      "source": "app",
+      "reporterId": "USR-103",
+      "reporterPhone": null,
+      "text": "Ankle-deep water on the street, receding slowly.",
+      "mediaUrls": [],
+      "location": { "lat": 26.9124, "lng": 75.7873 },
+      "locationText": null,
+      "tag": "flood",
+      "isEmergency": false,
+      "status": "resolved",
+      "createdAtMinutesAgo": 1440
+    },
+    {
+      "reportId": "RPT-4007",
+      "source": "app",
+      "reporterId": "USR-104",
+      "reporterPhone": null,
+      "text": "Minor injury from fall during evacuation, treated on-site.",
+      "mediaUrls": [],
+      "location": { "lat": 26.95, "lng": 75.82 },
+      "locationText": null,
+      "tag": "medical",
+      "isEmergency": false,
+      "status": "resolved",
+      "createdAtMinutesAgo": 720
+    }
+  ]
+}

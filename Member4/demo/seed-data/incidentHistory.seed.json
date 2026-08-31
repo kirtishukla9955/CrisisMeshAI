@@ -1,0 +1,15 @@
+{
+  "_comment": "DEMO DATA ONLY — seeds incidents/{id}/history so the post-disaster agent's response-time derivation has real data to work with. Not part of the canonical incident document itself. minutesAgo is resolved to a real timestamp by seed.js.",
+  "history": {
+    "CRS-2005": [
+      { "type": "status_change", "fromStatus": "new", "toStatus": "acknowledged", "actorId": "demo-authority-1", "actorName": "District Authority", "note": null, "minutesAgo": 1400 },
+      { "type": "status_change", "fromStatus": "acknowledged", "toStatus": "in_progress", "actorId": "demo-authority-1", "actorName": "District Authority", "note": "Team dispatched.", "minutesAgo": 1350 },
+      { "type": "status_change", "fromStatus": "in_progress", "toStatus": "resolved", "actorId": "demo-authority-1", "actorName": "District Authority", "note": "Water receded, area inspected.", "minutesAgo": 1300 }
+    ],
+    "CRS-2006": [
+      { "type": "status_change", "fromStatus": "new", "toStatus": "acknowledged", "actorId": "demo-authority-1", "actorName": "District Authority", "note": null, "minutesAgo": 715 },
+      { "type": "status_change", "fromStatus": "acknowledged", "toStatus": "in_progress", "actorId": "demo-authority-1", "actorName": "District Authority", "note": null, "minutesAgo": 705 },
+      { "type": "status_change", "fromStatus": "in_progress", "toStatus": "resolved", "actorId": "demo-authority-1", "actorName": "District Authority", "note": "Minor injury treated, resolved on-site.", "minutesAgo": 700 }
+    ]
+  }
+}

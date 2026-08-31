@@ -1,0 +1,46 @@
+// Firestore Security Rules — Member 4 snippet (Round 2)
+//
+// NOT a complete rules file. Merge into the main project's existing
+// firestore.rules under the `match /databases/{database}/documents` block.
+// Do not overwrite Member 1/2/3's existing rules for `reports`,
+// `volunteers`, etc.
+//
+// Assumes authority accounts carry a custom claim `role: "authority"`,
+// matching backend/middleware/authMiddleware.js. Adjust the claim check if
+// the main project's auth flow differs.
+
+match /incidents/{incidentId} {
+  // Citizens and the app can read incidents (for the live map, Member 2's
+  // module) — adjust if the main project wants read access restricted.
+  allow read: if true;
+
+  // All incident writes — including the `status` field Member 4 owns — go
+  // through the backend (Admin SDK, which bypasses these rules), never
+  // directly from a client. The backend enforces status-transition
+  // validation that rules alone can't express cleanly (see
+  // backend/validators/incidentValidators.js).
+  allow write: if false;
+
+  match /history/{eventId} {
+    // Audit trail is authority-readable, never client-writable.
+    allow read: if request.auth != null && request.auth.token.role == "authority";
+    allow write: if false; // written only by the backend via Admin SDK
+  }
+}
+
+match /volunteers/{volunteerId} {
+  // Read-only for Member 4's dashboard. Owned/written by Member 3's
+  // module — no write rule defined here, do not add one without
+  // coordinating with Member 3.
+  allow read: if request.auth != null && request.auth.token.role == "authority";
+}
+
+match /insight_reports/{reportId} {
+  allow read: if request.auth != null && request.auth.token.role == "authority";
+  allow write: if false; // written only by the backend via Admin SDK
+}
+
+// Round 2 change: the Round 1 `postDisasterReports` collection is retired.
+// If a rule for it still exists in the main rules file, it can be removed
+// once nothing writes to that collection anymore — do not leave a stale
+// permissive rule pointed at an unused collection.

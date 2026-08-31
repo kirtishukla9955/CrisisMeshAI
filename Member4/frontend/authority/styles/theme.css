@@ -1,0 +1,125 @@
+/**
+ * CrisisMesh AI — Authority Command Center design tokens (Round 2).
+ *
+ * SOURCE OF TRUTH: "CrisisMesh AI — Full-Stack Build Guide — Round 2" and
+ * its UI mockups. Base surface: dark navy (#17324A family). Urgency
+ * colors: red (#C0392B) and orange (#E67E22). Severity: critical=red,
+ * high=orange, moderate=yellow. Per the guide, color is never used alone
+ * to communicate status/severity — every badge pairs color + icon + text
+ * (see components/StatusBadge.jsx, SeverityBadge.jsx).
+ *
+ * Import this once at the authority dashboard's root alongside Tailwind.
+ */
+
+:root {
+  /* Surfaces — dark navy family per the guide */
+  --cm-bg-base: #0f2136;        /* app background, darker than the panel navy for depth */
+  --cm-bg-panel: #17324a;       /* the guide's named base navy */
+  --cm-bg-panel-raised: #1e3d59;
+  --cm-border: rgba(148, 178, 199, 0.14);
+  --cm-border-strong: rgba(148, 178, 199, 0.26);
+  --cm-glass: rgba(23, 50, 74, 0.78);
+
+  /* Typography */
+  --cm-text-primary: #eaf1f6;
+  --cm-text-secondary: #a9bdcc;
+  --cm-text-muted: #6f8598;
+  --cm-font-display: 'Space Grotesk', 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --cm-font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --cm-font-mono: 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Semantic — severity (derived from priorityScore, see shared/constants/statuses.js) */
+  --cm-critical: #e0473a;       /* red, close to guide's #C0392B, tuned for dark-bg contrast */
+  --cm-critical-bg: rgba(192, 57, 43, 0.16);
+  --cm-high: #e67e22;           /* guide's orange, exact */
+  --cm-high-bg: rgba(230, 126, 34, 0.14);
+  --cm-moderate: #f0c419;       /* yellow */
+  --cm-moderate-bg: rgba(240, 196, 25, 0.14);
+
+  /* Semantic — system */
+  --cm-operational: #34d399;
+  --cm-warning: #f0c419;
+  --cm-danger: #c0392b;         /* guide's urgency red, exact — used for destructive/critical actions */
+  --cm-info: #5aa9e6;
+  --cm-ai-accent: #a78bfa;      /* used only for AI-attributed content: badges, AI report sections */
+
+  --cm-radius-sm: 6px;
+  --cm-radius-md: 10px;
+  --cm-radius-lg: 16px;
+  --cm-shadow-panel: 0 1px 2px rgba(0,0,0,0.4), 0 8px 24px -8px rgba(0,0,0,0.5);
+}
+
+body {
+  background: var(--cm-bg-base);
+  color: var(--cm-text-primary);
+  font-family: var(--cm-font-body);
+}
+
+.cm-glass-panel {
+  background: var(--cm-glass);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--cm-radius-lg);
+  box-shadow: var(--cm-shadow-panel);
+}
+
+.cm-mono {
+  font-family: var(--cm-font-mono);
+  letter-spacing: 0.02em;
+}
+
+/* Live pulse indicator — the one recurring signature motif, used sparingly:
+   next to "Systems Operational," on the alerts feed's newest entry, and on
+   the AI "analyzing" state. Not used decoratively elsewhere. */
+@keyframes cm-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.55); }
+  70%  { box-shadow: 0 0 0 8px rgba(52, 211, 153, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+}
+.cm-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cm-operational);
+  animation: cm-pulse 2.2s infinite;
+}
+
+/* Visible keyboard focus ring — accessibility requirement (Phase 21). */
+.cm-focusable:focus-visible,
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--cm-info);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cm-live-dot { animation: none; }
+  * { scroll-behavior: auto !important; }
+
+  /* Tailwind's animate-pulse/animate-spin utilities (loading skeletons and
+     the AI-generation spinner) don't respect prefers-reduced-motion on
+     their own — this covers every use of them across the dashboard in one
+     place rather than requiring each component to opt out individually. */
+  .animate-pulse {
+    animation: none !important;
+    opacity: 0.6 !important;
+  }
+  .animate-spin {
+    animation-duration: 3s !important; /* keep a slow, low-vestibular-impact cue rather than removing the "in progress" signal entirely */
+  }
+}
+
+/* Print stylesheet for the post-disaster report export (Phase 18) — no PDF
+   dependency, uses the browser's native print-to-PDF. */
+@media print {
+  body { background: #fff; color: #111; }
+  .cm-no-print { display: none !important; }
+  .cm-glass-panel {
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: none;
+    color: #111;
+    backdrop-filter: none;
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "_comment": "DEMO DATA ONLY — Member 3-owned collection, read-only for Member 4. Included so the demo Command Center can display suggestedVolunteers details end-to-end.",
+  "volunteers": [
+    {
+      "volunteerId": "VOL-201",
+      "name": "Rescue Team Alpha",
+      "phone": "+91XXXXXXXX10",
+      "skills": ["swimming", "medical"],
+      "location": { "lat": 26.91, "lng": 75.79 },
+      "isVerified": true,
+      "isAvailable": true
+    },
+    {
+      "volunteerId": "VOL-202",
+      "name": "Relief Supply Team",
+      "phone": "+91XXXXXXXX11",
+      "skills": ["logistics", "driving"],
+      "location": { "lat": 26.94, "lng": 75.78 },
+      "isVerified": true,
+      "isAvailable": true
+    },
+    {
+      "volunteerId": "VOL-203",
+      "name": "Dr. Anika Sharma",
+      "phone": "+91XXXXXXXX12",
+      "skills": ["medical", "translation"],
+      "location": { "lat": 26.89, "lng": 75.81 },
+      "isVerified": true,
+      "isAvailable": false
+    }
+  ]
+}
