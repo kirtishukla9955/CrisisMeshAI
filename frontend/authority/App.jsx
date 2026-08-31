@@ -6,7 +6,8 @@ import CrisisMap from "./components/CrisisMap";
 import MapFilters from "./components/MapFilters";
 import MapLegend from "./components/MapLegend";
 import { useClusteredIncidents } from "./hooks/useClusteredIncidents";
-
+import { runSeed } from "../seed";
+window.runSeed = runSeed; // Exposes function to browser window
 function App() {
   // Change this line in App.jsx:
   const [filters, setFilters] = useState({ 

@@ -1,59 +1,53 @@
-// useClusteredIncidents.js
-// Pulls already-clustered incident data from the backend's
-// GET /api/incidents/clustered endpoint (Turf.js clustering happens
-// server-side in clusteringService.js).
-//
-// Polls on an interval as a pragmatic real-time substitute — swap the
-// polling block for a Firestore onSnapshot listener later if the team
-// wants push updates instead.
+import { useState, useEffect } from "react";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "../services/firebaseClient"; // Ensure path matches your firebase export
 
-import { useEffect, useRef, useState } from "react";
-
-const DEFAULT_ENDPOINT = "/api/incidents/clustered";
-const DEFAULT_POLL_MS = 15000;
-
-export function useClusteredIncidents({
-  endpoint = DEFAULT_ENDPOINT,
-  pollMs = DEFAULT_POLL_MS,
-} = {}) {
+export function useClusteredIncidents() {
   const [clusters, setClusters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const abortRef = useRef(null);
 
   useEffect(() => {
-    let intervalId;
+    setLoading(true);
+    
+    // Subscribe directly to the "incidents" collection
+    const unsubscribe = onSnapshot(
+      collection(db, "incidents"),
+      (snapshot) => {
+        const incidentsData = snapshot.docs.map((doc) => {
+          const data = doc.data();
+          
+          // Fallbacks covering both latitude/longitude and lat/lng formats
+          const latitude = Number(data.latitude || data.lat || data.centerLocation?.lat || 0);
+          const longitude = Number(data.longitude || data.lng || data.centerLocation?.lng || 0);
 
-    async function fetchClusters() {
-      abortRef.current?.abort();
-      const controller = new AbortController();
-      abortRef.current = controller;
+          return {
+            id: doc.id,
+            ...data,
+            // Provide BOTH naming standards so components won't break:
+            lat: latitude,
+            lng: longitude,
+            latitude: latitude,
+            longitude: longitude,
+            severity: Number(data.severity || data.priorityScore || 0),
+            type: data.type || data.primaryTag || "Flood",
+          };
+        });
 
-      try {
-        const res = await fetch(endpoint, { signal: controller.signal });
-        if (!res.ok) {
-          throw new Error(`Clustered incidents request failed: ${res.status}`);
-        }
-        const data = await res.json();
-        setClusters(Array.isArray(data) ? data : data.clusters ?? []);
+        setClusters(incidentsData);
+        setLoading(false);
         setError(null);
-      } catch (err) {
-        if (err.name !== "AbortError") {
-          setError(err);
-        }
-      } finally {
+      },
+      (err) => {
+        console.error("Firestore Listener Error:", err);
+        setError(err.message);
         setLoading(false);
       }
-    }
+    );
 
-    fetchClusters();
-    intervalId = setInterval(fetchClusters, pollMs);
-
-    return () => {
-      clearInterval(intervalId);
-      abortRef.current?.abort();
-    };
-  }, [endpoint, pollMs]);
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
 
   return { clusters, loading, error };
 }

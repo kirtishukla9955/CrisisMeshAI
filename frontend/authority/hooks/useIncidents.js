@@ -20,9 +20,8 @@ export function useIncidents({ status, severity } = {}) {
     setLoading(true);
     setError(null);
 
-    let constraints = [orderBy('priorityScore', 'desc')];
-    if (status) constraints.push(where('status', '==', status));
-    if (severity) constraints.push(where('severity', '==', severity));
+    // Replace line 28 in useIncidents.js:
+  let constraints = [orderBy('severity', 'desc')];
 
     const db = getFirestore();
     const q = query(collection(db, 'incidents'), ...constraints);

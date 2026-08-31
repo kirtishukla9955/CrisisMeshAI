@@ -13,8 +13,10 @@
  * Import this once at the authority dashboard's root (e.g. in
  * AuthorityDashboard.jsx or the app's global stylesheet) alongside Tailwind.
  */
-@import "tailwindcss";
 
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 :root {
   /* Surfaces */
   --cm-bg-base: #0a0d10;       /* app background */
