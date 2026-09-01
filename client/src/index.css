@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #17324A;
+  --color-orange: #E67E22;
+  --color-red: #C0392B;
+  --color-tag-flood: #2E6DA4;
+  --color-tag-injury: #B8A13E;
+  --color-tag-trapped: #A9702F;
+  --color-tag-food: #3F7D5C;
+  --color-tag-medical: #8E3B46;
+}
+
+body {
+  margin: 0;
+  background-color: #17324A;
+  color: white;
+}
