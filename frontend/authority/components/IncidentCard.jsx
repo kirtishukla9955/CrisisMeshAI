@@ -30,3 +30,4 @@ export default function IncidentCard({ incident, onOpen }) {
     </button>
   );
 }
+

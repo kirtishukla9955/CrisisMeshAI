@@ -19,5 +19,10 @@
     "Node >=18 is required because ai/postDisasterAgent/agent.js uses the global fetch() API instead of adding node-fetch as a dependency.",
     "Do not run `npm install` for this package in isolation as a way to launch a server — there is no server entry file here by design. See ../INTEGRATION_GUIDE.md: these dependencies are meant to be merged into the main project's existing backend package.json.",
     "If the main project's backend already declares express and/or firebase-admin, do not install a second, conflicting version — align on one version across the whole backend."
-  ]
+  ],
+  "devDependencies": {
+    "@types/node": "^26.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^7.0.2"
+  }
 }

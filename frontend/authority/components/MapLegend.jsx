@@ -1,23 +1,33 @@
-// MapLegend.jsx
-// Static legend overlay explaining what the marker/heatmap colors mean.
-// Pulls directly from SEVERITY_BANDS so it can never drift out of sync
-// with the actual marker colors.
-
-import { SEVERITY_BANDS } from "../utils/severityColors";
+import { SEVERITY_COLORS } from "../utils/severityColors";
 
 export default function MapLegend() {
   return (
-    <div className="absolute bottom-6 left-4 z-[1000] bg-white/95 backdrop-blur rounded-lg shadow-md px-3 py-2 text-xs space-y-1">
-      <div className="font-semibold text-gray-700 mb-1">Severity</div>
-      {SEVERITY_BANDS.map((band) => (
-        <div key={band.label} className="flex items-center gap-2">
-          <span
-            className="w-3 h-3 rounded-full inline-block"
-            style={{ backgroundColor: band.color }}
-          />
-          <span className="text-gray-600">{band.label}</span>
+    <div className="rounded-xl bg-[#0f2337]/95 backdrop-blur-sm border border-white/[0.08] p-3">
+      <div className="space-y-2">
+        {["critical", "high", "moderate"].map((level) => (
+          <div key={level} className="flex items-center gap-2">
+            <span
+              className="h-2 w-2 rounded-full"
+              style={{
+                backgroundColor: SEVERITY_COLORS[level],
+                boxShadow: `0 0 6px ${SEVERITY_COLORS[level]}80`,
+              }}
+            />
+            <span className="text-[11px] text-white/60 capitalize">
+              {level}
+            </span>
+          </div>
+        ))}
+        <div className="border-t border-white/[0.06] my-1.5" />
+        <div className="flex items-center gap-2">
+          <span className="text-[11px]">🧑</span>
+          <span className="text-[11px] text-white/50">Volunteer location</span>
         </div>
-      ))}
+        <div className="flex items-center gap-2">
+          <span className="text-[11px]">⛺</span>
+          <span className="text-[11px] text-white/50">Relief camps</span>
+        </div>
+      </div>
     </div>
   );
 }

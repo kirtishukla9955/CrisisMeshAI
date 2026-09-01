@@ -26,3 +26,4 @@ export default function KPICard({ label, value, accentColor = 'var(--cm-info)', 
     </div>
   );
 }
+

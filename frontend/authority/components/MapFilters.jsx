@@ -1,98 +1,58 @@
-// MapFilters.jsx
-// Controls panel for filtering what's shown on the map: incident type,
-// minimum severity, and time range. Lifts state up to CrisisMap via
-// onChange so filtering logic lives in one place.
+import { TAG_ICONS } from "../utils/severityColors";
 
-// frontend/authority/components/MapFilters.jsx
-import React from "react";
+const TAGS = ["flood", "fire", "medical", "injury", "shelter", "evacuation", "infrastructure"];
+const STATUSES = ["new", "acknowledged", "in_progress", "resolved"];
 
-export const INCIDENT_TYPES = ["flood", "earthquake", "cyclone", "landslide"];
-export const TIME_RANGES = [
-  { value: "1h", label: "Last hour" },
-  { value: "6h", label: "Last 6 hours" },
-  { value: "24h", label: "Last 24 hours" },
-  { value: "all", label: "All time" },
-];
-
-export const DEFAULT_MAP_FILTERS = {
-  types: [...INCIDENT_TYPES],
-  minSeverity: 0,
-  timeRange: "24h",
+const STATUS_LABELS = {
+  new: "New",
+  acknowledged: "Ack'd",
+  in_progress: "In Progress",
+  resolved: "Resolved",
 };
 
-export default function MapFilters({ filters = {}, onChange, onFilterChange }) {
-  // Support both 'onChange' and 'onFilterChange' prop naming
-  const handleChange = onChange || onFilterChange;
-
-  // Safe destructuring with fallbacks to prevent undefined crashes
-  const types = Array.isArray(filters.types) ? filters.types : DEFAULT_MAP_FILTERS.types;
-  const minSeverity = typeof filters.minSeverity === "number" ? filters.minSeverity : 0;
-  const timeRange = filters.timeRange || "24h";
-
-  function toggleType(type) {
-    const next = types.includes(type)
-      ? types.filter((t) => t !== type)
-      : [...types, type];
-    handleChange?.({ ...filters, types: next, minSeverity, timeRange });
-  }
-
+export default function MapFilters({
+  selectedTag,
+  setSelectedTag,
+  selectedStatus,
+  setSelectedStatus,
+}) {
   return (
-    <div className="absolute top-4 right-4 z-[1000] bg-white/95 backdrop-blur rounded-lg shadow-md p-3 w-56 space-y-3 text-sm">
-      <div>
-        <div className="font-semibold text-gray-700 mb-1.5">Incident type</div>
-        <div className="flex flex-wrap gap-1.5">
-          {INCIDENT_TYPES.map((type) => {
-            const isActive = types.includes(type);
-            return (
-              <button
-                key={type}
-                type="button"
-                onClick={() => toggleType(type)}
-                className={`px-2 py-1 rounded-full text-xs capitalize border transition-colors ${
-                  isActive
-                    ? "bg-blue-600 text-white border-blue-600"
-                    : "bg-white text-gray-600 border-gray-300"
-                }`}
-              >
-                {type}
-              </button>
-            );
-          })}
-        </div>
+    <div className="flex flex-wrap gap-2">
+      <div className="flex items-center gap-1.5 flex-wrap">
+        {TAGS.map((tag) => (
+          <button
+            key={tag}
+            type="button"
+            onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
+            className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-[11px] font-medium transition-all border ${
+              selectedTag === tag
+                ? "bg-white/10 border-white/20 text-white"
+                : "bg-transparent border-white/[0.06] text-neutral-500 hover:text-neutral-300 hover:border-white/10"
+            }`}
+          >
+            <span className="text-xs">{TAG_ICONS[tag]}</span>
+            <span className="capitalize">{tag}</span>
+          </button>
+        ))}
       </div>
 
-      <div>
-        <div className="font-semibold text-gray-700 mb-1.5">
-          Min. severity: {minSeverity}
-        </div>
-        <input
-          type="range"
-          min={0}
-          max={100}
-          step={5}
-          value={minSeverity}
-          onChange={(e) =>
-            handleChange?.({ ...filters, minSeverity: Number(e.target.value), types, timeRange })
-          }
-          className="w-full cursor-pointer"
-        />
-      </div>
+      <div className="w-px bg-white/[0.06] mx-1 hidden sm:block" />
 
-      <div>
-        <div className="font-semibold text-gray-700 mb-1.5">Time range</div>
-        <select
-          value={timeRange}
-          onChange={(e) => 
-            handleChange?.({ ...filters, timeRange: e.target.value, types, minSeverity })
-          }
-          className="w-full border border-gray-300 rounded px-2 py-1 text-xs bg-white"
-        >
-          {TIME_RANGES.map((r) => (
-            <option key={r.value} value={r.value}>
-              {r.label}
-            </option>
-          ))}
-        </select>
+      <div className="flex items-center gap-1.5 flex-wrap">
+        {STATUSES.map((status) => (
+          <button
+            key={status}
+            type="button"
+            onClick={() => setSelectedStatus(selectedStatus === status ? null : status)}
+            className={`rounded-lg px-2.5 py-1 text-[11px] font-medium transition-all border ${
+              selectedStatus === status
+                ? "bg-white/10 border-white/20 text-white"
+                : "bg-transparent border-white/[0.06] text-neutral-500 hover:text-neutral-300 hover:border-white/10"
+            }`}
+          >
+            {STATUS_LABELS[status]}
+          </button>
+        ))}
       </div>
     </div>
   );

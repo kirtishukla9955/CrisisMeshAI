@@ -1,39 +1,43 @@
-// severityColors.js
-// Single source of truth for how "severity" maps to color across the map UI
-// (markers, heatmap, legend, popups). Keeping this in one file means the
-// legend can never drift out of sync with what the markers actually show.
-//
-// Severity is assumed to be a 0-100 score coming from the AI Prioritization
-// Agent (Member 3). Adjust BANDS if their scale differs.
+export const SEVERITY_COLORS = {
+  critical: "#C0392B",
+  high: "#E67E22",
+  moderate: "#F1C40F",
+};
 
-export const SEVERITY_BANDS = [
-  { max: 25, label: "Low", color: "#22c55e" },      // green
-  { max: 50, label: "Moderate", color: "#eab308" },  // yellow
-  { max: 75, label: "High", color: "#f97316" },      // orange
-  { max: 101, label: "Critical", color: "#ef4444" }, // red
-];
+export const STATUS_COLORS = {
+  new: "#C0392B",
+  acknowledged: "#E67E22",
+  in_progress: "#3498DB",
+  resolved: "#27AE60",
+};
 
-export function getSeverityColor(severity = 0) {
-  const band = SEVERITY_BANDS.find((b) => severity < b.max);
-  return band ? band.color : SEVERITY_BANDS[SEVERITY_BANDS.length - 1].color;
+export const TAG_ICONS = {
+  flood: "🌊",
+  fire: "🔥",
+  medical: "🏥",
+  injury: "🩹",
+  shelter: "⛺",
+  evacuation: "🚨",
+  infrastructure: "🏗️",
+  rescue: "🚑",
+  cyclone: "🌀",
+  landslide: "⛰️",
+};
+
+export function getSeverityColor(score) {
+  if (score >= 80) return SEVERITY_COLORS.critical;
+  if (score >= 50) return SEVERITY_COLORS.high;
+  return SEVERITY_COLORS.moderate;
 }
 
-export function getSeverityLabel(severity = 0) {
-  const band = SEVERITY_BANDS.find((b) => severity < b.max);
-  return band ? band.label : "Unknown";
+export function getSeverityLabel(score) {
+  if (score >= 80) return "critical";
+  if (score >= 50) return "high";
+  return "moderate";
 }
 
-// Radius (in px) for a cluster marker, scaled by how many reports are in it.
-// Floors/ceilings keep single-report incidents visible and mega-clusters
-// from swallowing the map.
-export function getClusterRadius(reportCount = 1) {
-  const min = 8;
-  const max = 32;
-  const scaled = min + Math.sqrt(reportCount) * 4;
-  return Math.min(max, Math.max(min, scaled));
-}
-
-// Normalized 0-1 intensity value for leaflet.heat, which expects [lat, lng, intensity]
-export function getHeatIntensity(severity = 0) {
-  return Math.min(1, Math.max(0.1, severity / 100));
+export function getSeverityRadius(score) {
+  if (score >= 80) return 20;
+  if (score >= 50) return 15;
+  return 11;
 }

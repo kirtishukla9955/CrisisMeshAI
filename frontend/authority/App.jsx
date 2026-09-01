@@ -1,54 +1,40 @@
-// frontend/authority/App.jsx
-import "leaflet/dist/leaflet.css";
-import "./styles/theme.css";
-import React, { useState } from "react";
-import CrisisMap from "./components/CrisisMap";
-import MapFilters from "./components/MapFilters";
-import MapLegend from "./components/MapLegend";
-import { useClusteredIncidents } from "./hooks/useClusteredIncidents";
-import { runSeed } from "../seed";
-window.runSeed = runSeed; // Exposes function to browser window
-function App() {
-  // Change this line in App.jsx:
-  const [filters, setFilters] = useState({ 
-  type: "all", 
-  minSeverity: 0,
-  categories: [], // Add default arrays to prevent undefined crashes
-  tags: [] 
-  });
-  
-  const { clusters, loading: mapLoading, error } = useClusteredIncidents();
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import CommandCenterPage from "./pages/CommandCenterPage";
 
-  const handleFilterChange = (newFilters) => {
-    setFilters((prev) => ({ ...prev, ...newFilters }));
-  };
+const Landing = lazy(() => import("./pages/Landing"));
 
-  const filteredClusters = clusters ? clusters.filter((inc) => {
-    if (filters.type !== "all" && inc.type !== filters.type) return false;
-    if (filters.minSeverity && inc.severity < filters.minSeverity) return false;
-    return true;
-  }) : [];
-
+function RouteLoading() {
   return (
-    <div className="h-screen w-screen flex flex-col bg-gray-100 overflow-hidden">
-      <header className="w-full bg-white shadow-sm p-4 z-20 flex justify-between items-center border-b">
-        <h1 className="text-xl font-bold text-gray-800">CrisisMesh AI — Incident Command</h1>
-        {error && (
-          <span className="text-sm font-medium text-red-600 bg-red-100 px-3 py-1 rounded-full flex items-center">
-            ⚠️ Connection issue: Retrying live updates...
-          </span>
-        )}
-      </header>
-
-      <main className="flex-1 relative w-full h-full overflow-hidden">
-        <div className="relative w-full h-full">
-          <MapFilters filters={filters} onFilterChange={handleFilterChange} />
-          <CrisisMap incidents={filteredClusters} loading={mapLoading} />
-          <MapLegend />
-        </div>
-      </main>
+    <div className="min-h-screen flex items-center justify-center bg-[#17324A]">
+      <div className="animate-pulse text-white/40">Loading...</div>
     </div>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Suspense fallback={<RouteLoading />}>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/dashboard" element={<CommandCenterPage />} />
+          <Route
+            path="*"
+            element={
+              <div className="min-h-screen flex items-center justify-center bg-[#17324A] text-white">
+                <div className="text-center">
+                  <h1 className="text-4xl font-bold">404</h1>
+                  <p className="mt-2 text-white/50">Page not found</p>
+                  <a href="/" className="mt-4 inline-block text-sm text-[#E67E22] hover:underline">
+                    Go home
+                  </a>
+                </div>
+              </div>
+            }
+          />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+  );
+}
