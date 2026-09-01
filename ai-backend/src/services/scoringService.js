@@ -51,7 +51,7 @@ function calculateFallbackScore(reports) {
   if (textBlob.includes('drowning') || textBlob.includes('water') || textBlob.includes('flood')) {
     skillsSet.add('swimming');
   }
-  if (textBlob.includes('trapped') || textBlob.includes('rubble')) {
+  if (textBlob.includes('trapped') || textBlob.includes('rubble') || textBlob.includes('child') || textBlob.includes('elderly')) {
     skillsSet.add('search_and_rescue');
   }
   if (textBlob.includes('road blocked') || textBlob.includes('drive')) {
