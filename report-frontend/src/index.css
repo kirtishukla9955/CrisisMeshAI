@@ -1,8 +1,14 @@
 @import "tailwindcss";
 
 @theme {
-  --color-sos-red: #ef4444;
-  --color-sos-red-hover: #dc2626;
+  --color-navy: #17324A;
+  --color-orange: #E67E22;
+  --color-red: #C0392B;
+  --color-tag-flood: #2E6DA4;
+  --color-tag-injury: #B8A13E;
+  --color-tag-trapped: #A9702F;
+  --color-tag-food: #3F7D5C;
+  --color-tag-medical: #8E3B46;
 }
 
 body {
@@ -12,5 +18,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f3f4f6;
+  background-color: var(--color-bg-navy);
+  color: white;
 }

@@ -1,33 +1,27 @@
-// frontend-report/src/App.jsx
-import "./styles/theme.css";
-import React, { useState, useEffect } from "react";
-import ReportForm from "./components/ReportForm";
-import { getPendingReports, deleteReport, getPendingCount } from "./services/db";
-import { AlertCircle, WifiOff, Wifi } from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { getPendingCount } from './services/db';
+import { Globe, Wifi, WifiOff } from 'lucide-react';
+import HomeScreen from './components/HomeScreen';
+import ReportScreen from './components/ReportScreen';
 
-const API_URL = "http://localhost:5000/api/reports";
+const API_URL = 'http://localhost:5000/api/reports'; // Adjust for prod
 
 function App() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [pendingCount, setPendingCount] = useState(0);
-  const [syncing, setSyncing] = useState(false);
+  
+  // 'home' | 'report'
+  const [currentScreen, setCurrentScreen] = useState('home');
+  const [selectedTag, setSelectedTag] = useState(null);
 
   useEffect(() => {
     updatePendingCount();
 
-    const handleOnline = () => {
-      setIsOnline(true);
-      syncOfflineReports();
-    };
-    
+    const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
 
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
-
-    if (navigator.onLine) {
-      syncOfflineReports();
-    }
 
     return () => {
       window.removeEventListener("online", handleOnline);
@@ -41,84 +35,97 @@ function App() {
   };
 
   const syncOfflineReports = async () => {
-    if (syncing) return;
-    setSyncing(true);
-    
     try {
+      const { getPendingReports, deleteReport } = await import('./services/db');
       const reports = await getPendingReports();
-      if (reports.length === 0) {
-        setSyncing(false);
-        return;
-      }
+      if (reports.length === 0) return;
 
       for (const item of reports) {
         const formData = new FormData();
-        
-        Object.keys(item.reportData).forEach((key) => {
+        Object.keys(item.reportData).forEach(key => {
           if (item.reportData[key] !== null && item.reportData[key] !== undefined) {
-             if (typeof item.reportData[key] === "object") {
-                 formData.append(key, JSON.stringify(item.reportData[key]));
-             } else {
-                 formData.append(key, item.reportData[key]);
-             }
+             formData.append(key, typeof item.reportData[key] === 'object' ? JSON.stringify(item.reportData[key]) : item.reportData[key]);
           }
         });
 
-        if (item.files && item.files.length > 0) {
-          item.files.forEach((fileObj) => {
-            formData.append("media", fileObj.blob, fileObj.name || "offline_media");
-          });
+        if (item.files) {
+          item.files.forEach(f => formData.append('media', f.blob, f.name || "offline_media"));
         }
 
         try {
-          const response = await fetch(API_URL, {
-            method: "POST",
-            body: formData,
-          });
-
-          if (response.ok) {
-            await deleteReport(item.offlineId);
-          } else {
-            console.error("Failed to sync report", item.offlineId);
-          }
+          const res = await fetch(API_URL, { method: 'POST', body: formData });
+          if (res.ok) await deleteReport(item.offlineId);
         } catch (err) {
-          console.error("Network error during sync", err);
-          break;
+          console.error('Sync failed', err);
+          break; // Stop syncing on network failure
         }
       }
-      
       await updatePendingCount();
-    } finally {
-      setSyncing(false);
+    } catch (err) {
+      console.error('Error reading offline queue', err);
     }
   };
 
+  useEffect(() => {
+    if (isOnline) {
+      syncOfflineReports();
+    }
+  }, [isOnline]);
+
+  const navigateToReport = (tag) => {
+    setSelectedTag(tag);
+    setCurrentScreen('report');
+  };
+
+  const navigateHome = () => {
+    setCurrentScreen('home');
+    setSelectedTag(null);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center">
-      {/* Header */}
-      <header className="w-full bg-white shadow-sm p-4 sticky top-0 z-10 flex justify-between items-center">
-        <h1 className="text-xl font-bold text-gray-800">CrisisMesh AI — Report Submission</h1>
-        <div className="flex items-center space-x-3">
+    <div className="min-h-screen bg-navy flex flex-col items-center">
+      {/* Top Bar */}
+      <header className="w-full max-w-md p-4 flex justify-between items-center bg-navy sticky top-0 z-10 border-b border-gray-700/50">
+        {currentScreen === 'report' ? (
+          <button onClick={navigateHome} className="p-1 -ml-1 text-gray-300 hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+        ) : (
+          <Globe className="text-gray-300 w-6 h-6" />
+        )}
+        <div className="flex flex-col items-center">
+          <h1 className="text-lg font-bold text-white tracking-wide">CrisisMesh <span className="text-orange">AI</span></h1>
           {pendingCount > 0 && (
-            <span className="text-sm font-medium text-orange-600 bg-orange-100 px-2 py-1 rounded-full flex items-center">
-              <AlertCircle size={14} className="mr-1" />
-              {pendingCount} to sync
+            <span className="text-[10px] font-medium text-orange-200 mt-0.5">
+              {pendingCount} waiting to sync
             </span>
           )}
-          {isOnline ? (
-            <Wifi size={20} className="text-green-500" />
-          ) : (
-            <WifiOff size={20} className="text-red-500" />
-          )}
         </div>
+        {isOnline ? (
+          <Wifi className="text-gray-300 w-6 h-6" />
+        ) : (
+          <WifiOff className="text-red-400 w-6 h-6 animate-pulse" />
+        )}
       </header>
 
-      {/* Main Form Content */}
-      <main className="w-full max-w-md p-4 pb-20">
-        <ReportForm 
-          isOnline={isOnline} 
-          onSaveOffline={updatePendingCount} 
-        />
+      {/* Main Content Area */}
+      <main className="w-full max-w-md flex-1 flex flex-col overflow-y-auto">
+        {currentScreen === 'home' ? (
+          <HomeScreen 
+            isOnline={isOnline} 
+            onSelectTag={navigateToReport} 
+            onSaveOffline={updatePendingCount}
+            apiUrl={API_URL}
+          />
+        ) : (
+          <ReportScreen 
+            isOnline={isOnline} 
+            tag={selectedTag} 
+            onBack={navigateHome}
+            onSaveOffline={updatePendingCount}
+            apiUrl={API_URL}
+          />
+        )}
       </main>
     </div>
   );
