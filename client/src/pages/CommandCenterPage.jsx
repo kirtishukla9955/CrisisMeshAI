@@ -136,10 +136,10 @@ export default function CommandCenterPage({ authority }) {
         </header>
 
         {/* CONTENT: MAP + ALERTS */}
-        <div className="flex-1 flex overflow-hidden">
-          <div className="flex-1 relative">
+        <div className="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden relative">
+          <div className="flex-1 flex flex-col lg:block relative min-h-0">
             {loading ? (
-              <div className="h-full flex items-center justify-center bg-[#17324A]">
+              <div className="h-[50vh] lg:h-full shrink-0 flex items-center justify-center bg-[#17324A]">
                 <div className="text-center">
                   <div className="h-8 w-8 rounded-full border-2 border-white/20 border-t-white/60 animate-spin mx-auto" />
                   <p className="mt-3 text-xs text-white/40">Loading map data...</p>
@@ -147,48 +147,48 @@ export default function CommandCenterPage({ authority }) {
               </div>
             ) : (
               <>
-                <CrisisMap
-                  selectedIncident={selectedIncident}
-                  onSelectIncident={(inc) => {
-                    if (inc.centerLocation) setSelectedIncident(inc.centerLocation);
-                  }}
-                />
-
-                <div className="absolute top-3 left-3 z-[1000] w-60 sm:w-72">
-                  <TopPrioritySidebar onSelectIncident={(inc) => setSelectedIncident(inc.centerLocation)} />
+                <div className="h-[50vh] lg:h-full lg:absolute lg:inset-0 z-0 relative shrink-0">
+                  <CrisisMap
+                    selectedIncident={selectedIncident}
+                    onSelectIncident={(inc) => {
+                      if (inc.centerLocation) setSelectedIncident(inc.centerLocation);
+                    }}
+                  />
                 </div>
 
-                <div className="absolute top-3 right-3 z-[1000] w-52 hidden lg:block">
-                  <QuickReportPanel />
-                </div>
-
-                <div className="absolute bottom-3 left-3 z-[1000]">
-                  <VolunteerReliefLegend />
-                </div>
-
-                <button type="button"
-                  className="absolute top-3 right-3 z-[1000] lg:hidden flex h-9 w-9 items-center justify-center rounded-lg bg-[#0f2337]/90 border border-white/[0.1] text-white/60 hover:text-white backdrop-blur-sm"
-                >
-                  <Navigation className="h-4 w-4" />
-                </button>
-
-                {!loading && locatedIncidents.length > 0 && (
-                  <div className="absolute bottom-3 left-auto right-3 w-[75%] z-[1000] hidden lg:block">
-                    <IncidentsTable
-                      incidents={filteredIncidents}
-                      totalCount={locatedIncidents.length}
-                      searchQuery={searchQuery}
-                      setSearchQuery={setSearchQuery}
-                      onSelectIncident={(loc) => setSelectedIncident(loc)}
-                    />
+                <div className="flex flex-col gap-3 p-3 lg:p-0 relative z-[1000] lg:absolute lg:inset-0 pointer-events-none">
+                  
+                  <div className="pointer-events-auto lg:absolute lg:top-3 lg:left-3 w-full lg:w-72">
+                    <TopPrioritySidebar onSelectIncident={(inc) => setSelectedIncident(inc.centerLocation)} />
                   </div>
-                )}
+
+                  <div className="pointer-events-auto lg:absolute lg:top-3 lg:right-3 w-full lg:w-64">
+                    <QuickReportPanel />
+                  </div>
+
+                  <div className="pointer-events-auto lg:absolute lg:bottom-3 lg:left-3 hidden lg:block">
+                    <VolunteerReliefLegend />
+                  </div>
+
+                  {!loading && locatedIncidents.length > 0 && (
+                    <div className="pointer-events-auto lg:absolute lg:bottom-3 lg:left-auto lg:right-3 w-full lg:w-[60%] xl:w-[70%]">
+                      <IncidentsTable
+                        incidents={filteredIncidents}
+                        totalCount={locatedIncidents.length}
+                        searchQuery={searchQuery}
+                        setSearchQuery={setSearchQuery}
+                        onSelectIncident={(loc) => setSelectedIncident(loc)}
+                      />
+                    </div>
+                  )}
+
+                </div>
               </>
             )}
           </div>
 
           {/* ALERTS SIDEBAR */}
-          <aside className="hidden md:flex w-64 shrink-0 border-l border-white/[0.08] bg-[#0f2337] flex-col overflow-hidden">
+          <aside className="w-full lg:w-64 xl:w-72 shrink-0 border-t lg:border-t-0 lg:border-l border-white/[0.08] bg-[#0f2337] flex flex-col min-h-[300px] lg:min-h-0">
             <div className="px-4 py-3 border-b border-white/[0.08]">
               <h3 className="text-xs font-semibold text-white/80">Alerts Feed</h3>
             </div>
