@@ -47,8 +47,16 @@ export default function CommandCenterPage({ authority }) {
 
   const handleNavClick = (label) => {
     setMobileMenuOpen(false);
-    if (label === 'Dashboard') return; // already here
-    setToastMessage(`The "${label}" module is not fully implemented in this hackathon prototype.`);
+    if (label === 'Dashboard') return;
+    const routeMap = {
+      'Incidents': 'incidents',
+      'Alerts': 'alerts',
+      'Resources': 'resources',
+      'Users': 'users'
+    };
+    if (routeMap[label]) {
+      navigate(`/authority/${routeMap[label]}`);
+    }
   };
 
   const { incidents, loading } = useFirestoreIncidents();
@@ -275,7 +283,7 @@ function VolunteerReliefLegend() {
 
 function IncidentsTable({ incidents, totalCount, searchQuery, setSearchQuery, onSelectIncident }) {
   return (
-    <div className="rounded-xl bg-[#0f2337]/95 backdrop-blur-sm border border-white/[0.08] overflow-hidden">
+    <div className="rounded-xl bg-[#0f2337] border border-white/[0.08] overflow-hidden">
       <div className="flex items-center justify-between px-3 py-2 border-b border-white/[0.06]">
         <div className="flex items-center gap-2">
           <h3 className="text-[11px] font-semibold text-white/80">Incidents</h3>
