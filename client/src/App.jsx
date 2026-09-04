@@ -7,18 +7,22 @@ import AuthorityApp from './AuthorityApp';
 function App() {
   return (
     <BrowserRouter>
-      {/* Super simple debug nav to jump between the 3 apps quickly */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-900 text-white p-2 flex justify-around text-xs z-50 opacity-50 hover:opacity-100 transition-opacity">
-        <Link to="/" className="hover:text-orange-400">Citizen App</Link>
-        <Link to="/volunteer" className="hover:text-orange-400">Volunteer App</Link>
-        <Link to="/authority" className="hover:text-orange-400">Authority Dashboard</Link>
-      </div>
+      <div className="flex flex-col h-screen overflow-hidden bg-gray-900">
+        <div className="flex-1 relative overflow-y-auto">
+          <Routes>
+            <Route path="/" element={<ReportApp />} />
+            <Route path="/volunteer" element={<VolunteerApp />} />
+            <Route path="/authority/*" element={<AuthorityApp />} />
+          </Routes>
+        </div>
 
-      <Routes>
-        <Route path="/" element={<ReportApp />} />
-        <Route path="/volunteer" element={<VolunteerApp />} />
-        <Route path="/authority/*" element={<AuthorityApp />} />
-      </Routes>
+        {/* Super simple debug nav to jump between the 3 apps quickly */}
+        <div className="bg-[#0a0d10] border-t border-white/20 text-white p-3 flex justify-around text-sm font-bold z-[9999] shadow-[0_-4px_15px_rgba(0,0,0,0.5)]">
+          <Link to="/" className="hover:text-[#E67E22] transition-colors flex-1 text-center border-r border-white/10">Citizen App</Link>
+          <Link to="/volunteer" className="hover:text-[#E67E22] transition-colors flex-1 text-center border-r border-white/10">Volunteer App</Link>
+          <Link to="/authority/dashboard" className="hover:text-[#E67E22] transition-colors flex-1 text-center">Authority Dashboard</Link>
+        </div>
+      </div>
     </BrowserRouter>
   );
 }

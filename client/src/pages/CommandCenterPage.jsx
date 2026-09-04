@@ -77,7 +77,7 @@ export default function CommandCenterPage({ authority }) {
   }, [locatedIncidents, searchQuery]);
 
   return (
-    <div className="h-screen flex bg-[#17324A] text-white overflow-hidden">
+    <div className="h-full flex bg-[#17324A] text-white overflow-hidden">
       {/* LEFT SIDEBAR */}
       <aside className="hidden md:flex w-14 shrink-0 bg-[#0f2337] border-r border-white/[0.08] flex-col items-center py-4 gap-1">
         <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#C0392B]/20 mb-6">
