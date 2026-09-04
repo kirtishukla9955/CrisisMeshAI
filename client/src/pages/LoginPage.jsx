@@ -39,7 +39,7 @@ export default function LoginPage() {
             <input 
               type="email" 
               required 
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#17324A] focus:border-[#17324A] outline-none"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#17324A] focus:border-[#17324A] outline-none text-gray-900"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="authority@crisismesh.gov"
@@ -50,7 +50,7 @@ export default function LoginPage() {
             <input 
               type="password" 
               required 
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#17324A] focus:border-[#17324A] outline-none"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#17324A] focus:border-[#17324A] outline-none text-gray-900"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"

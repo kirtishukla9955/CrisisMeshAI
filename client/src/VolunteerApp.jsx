@@ -107,7 +107,7 @@ function App() {
               required
               value={name}
               onChange={e => setName(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-gray-900"
               placeholder="John Doe"
             />
           </div>
@@ -121,7 +121,7 @@ function App() {
               required
               value={phone}
               onChange={e => setPhone(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-gray-900"
               placeholder="+1 (555) 000-0000"
             />
           </div>
