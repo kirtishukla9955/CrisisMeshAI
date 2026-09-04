@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, onSnapshot, doc, setDoc } from "firebase/firestore";
+import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 function envOr(key, fallback) {
@@ -22,4 +22,4 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 
-export { collection, onSnapshot, doc, setDoc };
+export { collection, onSnapshot, doc, setDoc, addDoc };
