@@ -1,7 +1,6 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import { lazy, Suspense, useState, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase";
+
 import CommandCenterPage from "./pages/CommandCenterPage";
 
 const Landing = lazy(() => import("./pages/Landing"));
@@ -22,15 +21,13 @@ export default function AuthorityApp() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setAuthority({ uid: user.uid, email: user.email, name: user.displayName || 'Authority User', role: 'authority' });
-      } else {
-        setAuthority(null);
-      }
-      setLoading(false);
-    });
-    return () => unsubscribe();
+    const dummyUser = localStorage.getItem("dummy_auth_user");
+    if (dummyUser) {
+      setAuthority(JSON.parse(dummyUser));
+    } else {
+      setAuthority(null);
+    }
+    setLoading(false);
   }, []);
 
   if (loading) return <RouteLoading />;

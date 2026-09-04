@@ -75,7 +75,10 @@ export default function CommandCenterPage({ authority }) {
           </button>
         ))}
         <div className="flex-1" />
-        <button type="button" onClick={() => navigate("/")} title="Home"
+        <button type="button" onClick={() => {
+            localStorage.removeItem("dummy_auth_user");
+            window.location.href = "/";
+          }} title="Home"
           className="w-9 h-9 rounded-lg flex items-center justify-center text-white/40 hover:text-white/70 hover:bg-white/[0.05] transition-all"
         >
           <LogOut className="h-4 w-4" />

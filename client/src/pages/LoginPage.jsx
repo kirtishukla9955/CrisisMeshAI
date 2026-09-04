@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth } from '../firebase';
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -11,12 +10,13 @@ export default function LoginPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate('/authority/dashboard'); // Go to dashboard on success
-    } catch (err) {
-      setError("Invalid email or password. Please try again.");
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      return;
     }
+    const dummyUser = { uid: 'dummy-uid-123', email, name: 'Demo Authority', role: 'authority' };
+    localStorage.setItem("dummy_auth_user", JSON.stringify(dummyUser));
+    window.location.href = '/authority/dashboard'; // Force reload to mount AuthorityApp with user
   };
 
   const handleRegister = async (e) => {
@@ -25,14 +25,9 @@ export default function LoginPage() {
       setError("Please enter both email and password to register.");
       return;
     }
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      // Optional: Set a display name for the hackathon
-      await updateProfile(userCredential.user, { displayName: "Demo Authority" });
-      navigate('/authority/dashboard'); 
-    } catch (err) {
-      setError(err.message || "Failed to register.");
-    }
+    const dummyUser = { uid: 'dummy-uid-123', email, name: 'Demo Authority', role: 'authority' };
+    localStorage.setItem("dummy_auth_user", JSON.stringify(dummyUser));
+    window.location.href = '/authority/dashboard'; 
   };
 
   return (
