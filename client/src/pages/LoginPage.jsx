@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../firebase';
 
 export default function LoginPage() {
@@ -16,6 +16,22 @@ export default function LoginPage() {
       navigate('/authority/dashboard'); // Go to dashboard on success
     } catch (err) {
       setError("Invalid email or password. Please try again.");
+    }
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    if (!email || !password) {
+      setError("Please enter both email and password to register.");
+      return;
+    }
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      // Optional: Set a display name for the hackathon
+      await updateProfile(userCredential.user, { displayName: "Demo Authority" });
+      navigate('/authority/dashboard'); 
+    } catch (err) {
+      setError(err.message || "Failed to register.");
     }
   };
 
@@ -56,12 +72,26 @@ export default function LoginPage() {
               placeholder="••••••••"
             />
           </div>
-          <button 
-            type="submit" 
-            className="w-full bg-[#E67E22] hover:bg-[#D35400] text-white font-bold py-3 rounded-lg transition-colors"
-          >
-            Sign In
-          </button>
+          <div className="flex flex-col gap-3">
+            <button 
+              type="submit" 
+              className="w-full bg-[#E67E22] hover:bg-[#D35400] text-white font-bold py-3 rounded-lg transition-colors"
+            >
+              Sign In
+            </button>
+            <div className="relative flex items-center py-2">
+              <div className="flex-grow border-t border-gray-200"></div>
+              <span className="flex-shrink-0 mx-4 text-gray-400 text-xs uppercase">or</span>
+              <div className="flex-grow border-t border-gray-200"></div>
+            </div>
+            <button 
+              type="button" 
+              onClick={handleRegister}
+              className="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold py-3 rounded-lg transition-colors"
+            >
+              Register New Account
+            </button>
+          </div>
         </form>
       </div>
     </div>
