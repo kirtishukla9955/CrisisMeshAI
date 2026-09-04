@@ -4,6 +4,7 @@ import CrisisMap from "../components/CrisisMap";
 import TopPrioritySidebar from "../components/TopPrioritySidebar";
 import StatusBadge from "../components/StatusBadge";
 import PriorityBadge from "../components/PriorityBadge";
+import Toast from "../components/Toast";
 import { TAG_ICONS } from "../utils/severityColors";
 import { useNavigate } from "react-router-dom";
 import {
@@ -42,6 +43,13 @@ export default function CommandCenterPage({ authority }) {
   const [selectedIncident, setSelectedIncident] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState(null);
+
+  const handleNavClick = (label) => {
+    setMobileMenuOpen(false);
+    if (label === 'Dashboard') return; // already here
+    setToastMessage(`The "${label}" module is not fully implemented in this hackathon prototype.`);
+  };
 
   const { incidents, loading } = useFirestoreIncidents();
 
@@ -69,6 +77,7 @@ export default function CommandCenterPage({ authority }) {
         </div>
         {NAV_ITEMS.map((item) => (
           <button key={item.label} type="button" title={item.label}
+            onClick={() => handleNavClick(item.label)}
             className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all ${item.active ? "bg-white/10 text-white" : "text-white/40 hover:text-white/70 hover:bg-white/[0.05]"}`}
           >
             <item.icon className="h-4 w-4" />
@@ -101,7 +110,7 @@ export default function CommandCenterPage({ authority }) {
             </div>
             <nav className="hidden md:flex items-center gap-1">
               {["Dashboard", "Incidents", "Users"].map((tab) => (
-                <button key={tab} type="button"
+                <button key={tab} type="button" onClick={() => handleNavClick(tab)}
                   className={`px-3 py-1 text-xs rounded-md transition-colors ${tab === "Dashboard" ? "bg-white/10 text-white" : "text-white/50 hover:text-white/80"}`}
                 >
                   {tab}
@@ -202,7 +211,7 @@ export default function CommandCenterPage({ authority }) {
         <div className="md:hidden fixed inset-0 z-50 bg-[#0f2337]/95 backdrop-blur-sm">
           <div className="flex flex-col pt-16 px-6 gap-2">
             {NAV_ITEMS.map((item) => (
-              <button key={item.label} type="button" onClick={() => setMobileMenuOpen(false)}
+              <button key={item.label} type="button" onClick={() => handleNavClick(item.label)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${item.active ? "bg-white/10 text-white" : "text-white/50 hover:text-white/70 hover:bg-white/[0.05]"}`}
               >
                 <item.icon className="h-5 w-5" />
@@ -212,6 +221,7 @@ export default function CommandCenterPage({ authority }) {
           </div>
         </div>
       )}
+      <Toast message={toastMessage} onDismiss={() => setToastMessage(null)} />
     </div>
   );
 }
