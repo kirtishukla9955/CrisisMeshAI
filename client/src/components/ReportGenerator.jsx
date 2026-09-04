@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { Sparkles } from 'lucide-react';
 
 const LOADING_MESSAGES = [
-  'Analyzing incident history…',
-  'Mapping response patterns…',
-  'Evaluating severity trends…',
-  'Generating authority briefing…',
+  'Analyzing incident history...',
+  'Mapping response patterns...',
+  'Evaluating severity trends...',
+  'Generating authority briefing...',
 ];
 
 /**
@@ -23,27 +24,27 @@ export default function ReportGenerator({ onGenerate, generating }) {
   }, [generating]);
 
   return (
-    <div className="cm-glass-panel p-6 flex flex-col items-center text-center gap-4">
+    <div className="bg-[#17324A] border border-white/10 rounded-xl p-8 flex flex-col items-center text-center gap-6 shadow-lg">
       <div>
-        <div className="cm-mono text-[11px] tracking-[0.2em] text-[color:var(--cm-ai-accent)] font-semibold">
+        <div className="text-xs tracking-[0.2em] text-[#9b59b6] font-bold uppercase mb-1">
           POST-DISASTER INTELLIGENCE
         </div>
-        <div className="text-[13px] text-[color:var(--cm-text-secondary)] mt-1">
-          AI-generated operational review
+        <div className="text-sm text-white/60">
+          AI-generated operational review and response analysis
         </div>
       </div>
 
       {generating ? (
-        <div className="flex flex-col items-center gap-3 py-2">
-          <div className="w-8 h-8 rounded-full border-2 border-[color:var(--cm-ai-accent)] border-t-transparent animate-spin" />
-          <div className="text-[13px] text-[color:var(--cm-text-secondary)]">{LOADING_MESSAGES[messageIndex]}</div>
+        <div className="flex flex-col items-center gap-4 py-4">
+          <div className="w-10 h-10 rounded-full border-4 border-[#9b59b6]/30 border-t-[#9b59b6] animate-spin" />
+          <div className="text-sm font-medium text-[#9b59b6] animate-pulse">{LOADING_MESSAGES[messageIndex]}</div>
         </div>
       ) : (
         <button
           onClick={onGenerate}
-          className="px-4 py-2.5 rounded-md text-[13px] font-medium"
-          style={{ background: 'var(--cm-ai-accent)', color: '#0a0d10' }}
+          className="flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-bold bg-[#9b59b6] hover:bg-[#8e44ad] text-white transition-all shadow-[0_0_15px_rgba(155,89,182,0.4)] hover:shadow-[0_0_25px_rgba(155,89,182,0.6)] transform hover:-translate-y-0.5"
         >
+          <Sparkles className="h-4 w-4" />
           Generate AI Report
         </button>
       )}

@@ -2,24 +2,19 @@ import React from 'react';
 import AIConfidenceBadge from './AIConfidenceBadge';
 import CategoryBar from './charts/CategoryBar';
 
-/**
- * Renders a stored PostDisasterReport (AI-generated or rule-based
- * fallback). Section headers mirror the structure required in project
- * brief section 21 exactly, so nothing the AI/fallback returns is dropped.
- */
 export default function PostDisasterReport({ report }) {
   if (!report) return null;
 
   const isFallback = report.generatedBy === 'rule_based_fallback';
 
   return (
-    <div className="flex flex-col gap-5">
-      <div className="cm-glass-panel p-5 flex items-center justify-between flex-wrap gap-3">
+    <div className="flex flex-col gap-6">
+      <div className="bg-[#17324A] border border-white/10 rounded-xl p-5 flex items-center justify-between flex-wrap gap-4 shadow-lg">
         <div>
-          <div className="cm-mono text-[11px] tracking-[0.2em] text-[color:var(--cm-text-muted)]">
+          <div className="text-xs font-mono tracking-[0.2em] text-white/50">
             {isFallback ? 'FALLBACK REPORT' : 'AI GENERATED'}
           </div>
-          <div className="text-[13px] text-[color:var(--cm-text-secondary)] mt-1">
+          <div className="text-sm text-white/60 mt-1">
             Data analyzed: {report.dataAnalyzed?.reportsAnalyzed ?? '—'} reports ·{' '}
             {report.dataAnalyzed?.incidentsAnalyzed ?? '—'} incidents
           </div>
@@ -28,14 +23,14 @@ export default function PostDisasterReport({ report }) {
       </div>
 
       <Section title="Executive Summary">
-        <p className="text-[13px] leading-relaxed text-[color:var(--cm-text-secondary)]">{report.executiveSummary}</p>
+        <p className="text-sm leading-relaxed text-white/80">{report.executiveSummary}</p>
       </Section>
 
       <Section title="Disaster Impact">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <Stat label="Total Incidents" value={report.impact?.totalIncidents} />
-          <Stat label="Critical" value={report.impact?.criticalIncidents} color="var(--cm-critical)" />
-          <Stat label="High Severity" value={report.impact?.highSeverityIncidents} color="var(--cm-high)" />
+          <Stat label="Critical" value={report.impact?.criticalIncidents} color="#e74c3c" />
+          <Stat label="High Severity" value={report.impact?.highSeverityIncidents} color="#e67e22" />
           <Stat label="Affected Areas" value={report.impact?.affectedAreas?.length ?? 0} />
         </div>
       </Section>
@@ -44,8 +39,8 @@ export default function PostDisasterReport({ report }) {
         {report.hardestHitAreas?.length ? (
           <ol className="flex flex-col gap-2">
             {report.hardestHitAreas.map((area, i) => (
-              <li key={area} className="flex items-center gap-3 text-[13px]">
-                <span className="cm-mono w-6 text-[color:var(--cm-text-muted)]">{String(i + 1).padStart(2, '0')}</span>
+              <li key={area} className="flex items-center gap-3 text-sm text-white/80">
+                <span className="font-mono w-6 text-white/40">{String(i + 1).padStart(2, '0')}</span>
                 {area}
               </li>
             ))}
@@ -56,13 +51,13 @@ export default function PostDisasterReport({ report }) {
       </Section>
 
       <Section title="Response Performance">
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
           <Stat
             label="Avg. Response Time"
             value={report.responsePerformance?.averageResponseTimeMinutes ?? '—'}
             suffix={report.responsePerformance?.averageResponseTimeMinutes ? 'min' : ''}
           />
-          <Stat label="Unresolved" value={report.responsePerformance?.unresolvedCount ?? '—'} color="var(--cm-warning)" />
+          <Stat label="Unresolved" value={report.responsePerformance?.unresolvedCount ?? '—'} color="#f1c40f" />
           <Stat label="Slowest Incidents" value={report.responsePerformance?.slowestIncidents?.length ?? 0} />
         </div>
       </Section>
@@ -77,7 +72,7 @@ export default function PostDisasterReport({ report }) {
         {report.infrastructureImpact?.length ? (
           <div className="flex flex-wrap gap-2">
             {report.infrastructureImpact.map((item) => (
-              <span key={item} className="cm-mono text-[11px] px-2.5 py-1 rounded-md bg-[color:var(--cm-bg-panel-raised)] border border-[color:var(--cm-border-strong)]">
+              <span key={item} className="font-mono text-xs px-3 py-1.5 rounded-md bg-white/[0.04] border border-white/10 text-white/80">
                 {item}
               </span>
             ))}
@@ -88,10 +83,10 @@ export default function PostDisasterReport({ report }) {
       </Section>
 
       <Section title="Key Findings">
-        <ul className="flex flex-col gap-2">
+        <ul className="flex flex-col gap-3">
           {report.keyFindings?.map((finding, i) => (
-            <li key={i} className="text-[13px] text-[color:var(--cm-text-secondary)] flex gap-2">
-              <span style={{ color: 'var(--cm-ai-accent)' }}>▸</span>
+            <li key={i} className="text-sm text-white/80 flex items-start gap-3">
+              <span className="text-[#9b59b6] mt-0.5">▸</span>
               {finding}
             </li>
           ))}
@@ -99,17 +94,17 @@ export default function PostDisasterReport({ report }) {
       </Section>
 
       <Section title="Recommendations">
-        <ul className="flex flex-col gap-2">
+        <ul className="flex flex-col gap-3">
           {report.recommendations?.map((rec, i) => (
-            <li key={i} className="text-[13px] text-[color:var(--cm-text-secondary)] flex gap-2">
-              <span style={{ color: 'var(--cm-operational)' }}>✓</span>
+            <li key={i} className="text-sm text-white/80 flex items-start gap-3">
+              <span className="text-[#2ecc71] mt-0.5">✓</span>
               {rec}
             </li>
           ))}
         </ul>
       </Section>
 
-      <div className="text-center text-[11px] text-[color:var(--cm-text-muted)] italic pt-2">
+      <div className="text-center text-xs text-white/40 italic pt-4">
         AI assists the authority. It never silently makes the final decision.
       </div>
     </div>
@@ -118,22 +113,22 @@ export default function PostDisasterReport({ report }) {
 
 function Section({ title, children }) {
   return (
-    <div className="cm-glass-panel p-5">
-      <div className="text-[11px] uppercase tracking-wider text-[color:var(--cm-text-muted)] font-medium mb-3">{title}</div>
+    <div className="bg-[#17324A] border border-white/10 rounded-xl p-6 shadow-lg">
+      <div className="text-xs uppercase tracking-wider text-white/50 font-bold mb-4">{title}</div>
       {children}
     </div>
   );
 }
 
-function Stat({ label, value, color = 'var(--cm-text-primary)', suffix = '' }) {
+function Stat({ label, value, color = '#ffffff', suffix = '' }) {
   return (
     <div>
-      <div className="cm-mono text-xl font-semibold" style={{ color }}>{value ?? '—'} <span className="text-xs font-normal">{suffix}</span></div>
-      <div className="text-[11px] text-[color:var(--cm-text-muted)]">{label}</div>
+      <div className="font-mono text-2xl font-bold" style={{ color }}>{value ?? '—'} <span className="text-sm font-normal text-white/50">{suffix}</span></div>
+      <div className="text-xs text-white/50 mt-1">{label}</div>
     </div>
   );
 }
 
 function Empty({ text }) {
-  return <div className="text-[13px] text-[color:var(--cm-text-muted)]">{text}</div>;
+  return <div className="text-sm text-white/40 italic">{text}</div>;
 }

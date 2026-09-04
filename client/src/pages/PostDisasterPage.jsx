@@ -30,17 +30,17 @@ export default function PostDisasterPage({ authority }) {
   };
 
   return (
-    <div className="flex min-h-screen" >
+    <div className="flex min-h-screen">
       <Sidebar active="ai-reports" onNavigate={onNavigate} authority={authority} />
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 bg-[#0f2337] text-white overflow-y-auto">
         <TopBar eventName="Post-Disaster Intelligence" lastSync={new Date()} />
-        <main className="p-6 max-w-3xl mx-auto flex flex-col gap-6">
+        <main className="p-6 max-w-4xl mx-auto flex flex-col gap-6">
           <ReportGenerator onGenerate={handleGenerate} generating={generating} />
 
-          {loading && <div className="bg-gray-800 border border-gray-700 rounded-xl h-40 animate-pulse" />}
+          {loading && <div className="bg-[#17324A] border border-white/10 rounded-xl h-40 animate-pulse shadow-lg" />}
           {!loading && report && <PostDisasterReport report={report} />}
           {!loading && !report && !generating && (
-            <div className="bg-gray-800 border border-gray-700 rounded-xl p-8 text-center text-[13px] text-[]">
+            <div className="bg-[#17324A] border border-white/10 rounded-xl p-12 text-center text-sm text-white/50 shadow-lg">
               No report generated yet for this event. Click "Generate AI Report" once incident data has been collected.
             </div>
           )}

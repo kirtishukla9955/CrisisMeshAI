@@ -9,11 +9,11 @@ export default function CategoryBar({ data }) {
   return (
     <ResponsiveContainer width="100%" height={220}>
       <BarChart data={chartData} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="var(--cm-border)" vertical={false} />
-        <XAxis dataKey="name" tick={{ fill: 'var(--cm-text-muted)', fontSize: 11 }} axisLine={{ stroke: 'var(--cm-border-strong)' }} />
-        <YAxis tick={{ fill: 'var(--cm-text-muted)', fontSize: 11 }} axisLine={false} allowDecimals={false} />
-        <Tooltip contentStyle={{ background: 'var(--cm-bg-panel-raised)', border: '1px solid var(--cm-border-strong)', borderRadius: 8, fontSize: 12 }} />
-        <Bar dataKey="count" fill="var(--cm-info)" radius={[4, 4, 0, 0]} />
+        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" vertical={false} />
+        <XAxis dataKey="name" tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 11 }} axisLine={{ stroke: 'rgba(255,255,255,0.2)' }} />
+        <YAxis tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 11 }} axisLine={false} allowDecimals={false} />
+        <Tooltip contentStyle={{ background: '#0f2337', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, fontSize: 12 }} />
+        <Bar dataKey="count" fill="#3498DB" radius={[4, 4, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );
