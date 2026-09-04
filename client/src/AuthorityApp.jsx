@@ -9,6 +9,7 @@ const IncidentDetailsPage = lazy(() => import("./pages/IncidentDetailsPage"));
 const PostDisasterPage = lazy(() => import("./pages/PostDisasterPage"));
 const PlaceholderPage = lazy(() => import("./pages/PlaceholderPage"));
 const LiveIncidentsPage = lazy(() => import("./pages/LiveIncidentsPage"));
+const PriorityQueuePage = lazy(() => import("./pages/PriorityQueuePage"));
 
 function RouteLoading() {
   return (
@@ -47,7 +48,7 @@ export default function AuthorityApp() {
           <Route path="/alerts" element={authority ? <PlaceholderPage authority={authority} title="Alerts" activeTab="alerts" /> : <Navigate to="/authority/login" />} />
           <Route path="/resources" element={authority ? <PlaceholderPage authority={authority} title="Resources" activeTab="resources" /> : <Navigate to="/authority/login" />} />
           <Route path="/users" element={authority ? <PlaceholderPage authority={authority} title="Users" activeTab="users" /> : <Navigate to="/authority/login" />} />
-          <Route path="/priority-queue" element={authority ? <PlaceholderPage authority={authority} title="Priority Queue" activeTab="priority-queue" /> : <Navigate to="/authority/login" />} />
+          <Route path="/priority-queue" element={authority ? <PriorityQueuePage authority={authority} /> : <Navigate to="/authority/login" />} />
           <Route path="/analytics" element={authority ? <PlaceholderPage authority={authority} title="Analytics" activeTab="analytics" /> : <Navigate to="/authority/login" />} />
           <Route path="/response-history" element={authority ? <PlaceholderPage authority={authority} title="Response History" activeTab="response-history" /> : <Navigate to="/authority/login" />} />
           <Route path="/settings" element={authority ? <PlaceholderPage authority={authority} title="Settings" activeTab="settings" /> : <Navigate to="/authority/login" />} />
