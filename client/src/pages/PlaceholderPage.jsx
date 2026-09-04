@@ -18,7 +18,9 @@ export default function PlaceholderPage({ authority, title, activeTab }) {
         <TopBar eventName={title} lastSync={new Date()} />
         <main className="p-12 max-w-4xl mx-auto flex flex-col gap-6 items-center justify-center min-h-[60vh] text-center">
           <div className="w-24 h-24 mb-6 rounded-full bg-[#17324A] flex items-center justify-center shadow-lg border border-white/10">
-            <span className="text-4xl text-white/50">ðŸš</span>
+            <svg className="h-10 w-10 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
           </div>
           <h1 className="text-3xl font-bold text-white/90">{title} Module</h1>
           <p className="text-white/50 max-w-lg leading-relaxed">
