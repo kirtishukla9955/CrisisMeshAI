@@ -37,7 +37,7 @@ function hasValidLocation(i) {
   );
 }
 
-export default function CommandCenterPage() {
+export default function CommandCenterPage({ authority }) {
   const navigate = useNavigate();
   const [selectedIncident, setSelectedIncident] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");

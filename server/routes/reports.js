@@ -4,10 +4,20 @@ const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const { db, storage, admin } = require('../firebase');
 const twilio = require('twilio');
+const rateLimit = require('express-rate-limit');
 
 const upload = multer({ storage: multer.memoryStorage() });
 
 const VALID_TAGS = ['flood', 'injury', 'trapped', 'food_water', 'medical', 'road_blocked', 'other'];
+
+// Rate limit: 10 requests per 5 minutes per IP
+const reportLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000, 
+  max: 10,
+  message: { error: "Too many reports created from this IP, please try again after 5 minutes" },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // Helper function to upload file buffer to Firebase Storage
 async function uploadToFirebase(file) {
@@ -26,7 +36,7 @@ async function uploadToFirebase(file) {
 }
 
 // POST /api/reports
-router.post('/reports', upload.array('media'), async (req, res) => {
+router.post('/reports', reportLimiter, upload.array('media'), async (req, res) => {
   try {
     const data = req.body;
     const files = req.files || [];

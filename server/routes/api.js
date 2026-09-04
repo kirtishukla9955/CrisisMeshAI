@@ -87,7 +87,7 @@ router.get('/incidents/:id/match-volunteers', async (req, res) => {
 // 5. PATCH /api/incidents/:id/status
 router.patch('/incidents/:id/status', async (req, res) => {
   try {
-    const { status } = req.body;
+    const { status, authorityNote } = req.body;
     const validStatuses = ['new', 'acknowledged', 'in_progress', 'resolved'];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ error: "Invalid status" });
@@ -97,8 +97,74 @@ router.patch('/incidents/:id/status', async (req, res) => {
       status,
       updatedAt: admin.firestore.FieldValue.serverTimestamp()
     });
+
+    // Log status change in history
+    await db.collection(`incidents/${req.params.id}/history`).add({
+      type: 'status_change',
+      status,
+      note: authorityNote || '',
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
+    });
     
     res.json({ success: true, status });
+  } catch (err) {
+    res.status(500).json({ error: "Server Error" });
+  }
+});
+
+// 6. GET /api/incidents/:id/reports
+router.get('/incidents/:id/reports', async (req, res) => {
+  try {
+    const incidentDoc = await db.collection('incidents').doc(req.params.id).get();
+    if (!incidentDoc.exists) return res.status(404).json({ error: "Not found" });
+    
+    const reportIds = incidentDoc.data().reportIds || [];
+    if (reportIds.length === 0) return res.json([]);
+
+    // Fetch reports in chunks to avoid firestore 'in' limit of 30, or just fetch all
+    const reports = [];
+    for (const rid of reportIds) {
+      const r = await db.collection('reports').doc(rid).get();
+      if (r.exists) {
+        reports.push({ id: r.id, ...r.data() });
+      }
+    }
+    
+    res.json(reports);
+  } catch (err) {
+    res.status(500).json({ error: "Server Error" });
+  }
+});
+
+// 7. GET /api/incidents/:id/history
+router.get('/incidents/:id/history', async (req, res) => {
+  try {
+    const snapshot = await db.collection(`incidents/${req.params.id}/history`)
+      .orderBy('createdAt', 'desc')
+      .get();
+      
+    let history = [];
+    snapshot.forEach(doc => history.push({ id: doc.id, ...doc.data() }));
+    res.json(history);
+  } catch (err) {
+    res.status(500).json({ error: "Server Error" });
+  }
+});
+
+// 8. POST /api/incidents/:id/notes
+router.post('/incidents/:id/notes', async (req, res) => {
+  try {
+    const { note, author } = req.body;
+    if (!note) return res.status(400).json({ error: "Note is required" });
+    
+    const docRef = await db.collection(`incidents/${req.params.id}/history`).add({
+      type: 'note',
+      note,
+      author: author || 'Authority',
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+    
+    res.status(201).json({ success: true, id: docRef.id });
   } catch (err) {
     res.status(500).json({ error: "Server Error" });
   }

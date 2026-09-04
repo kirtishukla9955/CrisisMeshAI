@@ -12,12 +12,18 @@ import { useIncident } from '../hooks/useIncident';
 import { incidentService } from '../services/incidentService';
 import { relativeTime, titleCase } from '../utils/formatters';
 import { SOURCE_LABELS } from '../utils/constants';
+import { useParams, useNavigate } from 'react-router-dom';
 
-export default function IncidentDetailsPage({ incidentId, authority, onBack, onNavigate }) {
+export default function IncidentDetailsPage({ authority }) {
+  const { id: incidentId } = useParams();
+  const navigate = useNavigate();
   const { incident, reports, history, loading, error, refresh } = useIncident(incidentId);
   const [busy, setBusy] = useState(false);
   const [toast, setToast] = useState(null);
   const [historyTab, setHistoryTab] = useState('timeline'); // 'timeline' | 'audit'
+
+  const onBack = () => navigate('/dashboard');
+  const onNavigate = (path) => navigate(path);
 
   const handleChangeStatus = async (status, authorityNote) => {
     setBusy(true);
@@ -46,32 +52,32 @@ export default function IncidentDetailsPage({ incidentId, authority, onBack, onN
   };
 
   return (
-    <div className="flex min-h-screen" style={{ fontFamily: 'var(--cm-font-body)' }}>
+    <div className="flex min-h-screen" >
       <Sidebar active="live-incidents" onNavigate={onNavigate} authority={authority} />
       <div className="flex-1 min-w-0">
         <TopBar eventName={incident?.title || 'Incident Detail'} lastSync={new Date()} />
         <main className="p-6">
-          <button onClick={onBack} className="text-[13px] text-[color:var(--cm-text-secondary)] hover:text-[color:var(--cm-text-primary)] mb-4">
+          <button onClick={onBack} className="text-[13px] text-[color:#d1d5db] hover:text-[color:white] mb-4">
             ← Back to Command Center
           </button>
 
-          {loading && <div className="cm-glass-panel h-40 animate-pulse" />}
-          {error && <div className="cm-glass-panel p-6 text-[color:var(--cm-danger)] text-sm">Couldn't load this incident.</div>}
+          {loading && <div className="bg-gray-800 border border-gray-700 rounded-xl h-40 animate-pulse" />}
+          {error && <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 text-[color:#ef4444] text-sm">Couldn't load this incident.</div>}
 
           {incident && (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <div className="lg:col-span-2 flex flex-col gap-5">
-                <div className="cm-glass-panel p-5">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-5">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="cm-mono text-[12px] text-[color:var(--cm-text-muted)]">{incident.id}</span>
+                    <span className="font-mono text-[12px] text-[color:#9ca3af]">{incident.id}</span>
                     <StatusBadge status={incident.status} />
                   </div>
-                  <h1 className="text-xl font-semibold mb-3" style={{ fontFamily: 'var(--cm-font-display)' }}>{incident.title}</h1>
+                  <h1 className="text-xl font-semibold mb-3" >{incident.title}</h1>
                   <div className="flex flex-wrap items-center gap-6">
                     <PriorityBadge score={incident.priorityScore} severity={incident.severity} size="lg" />
                     <AIConfidenceBadge confidence={incident.aiConfidence} fallbackUsed={incident.aiFallbackUsed} />
                   </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-5 pt-5 border-t border-[color:var(--cm-border)] text-[13px]">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-5 pt-5 border-t border-[color:#374151] text-[13px]">
                     <Field label="Location" value={incident.locationLabel} />
                     <Field label="Latitude" value={incident.location?.lat} mono />
                     <Field label="Longitude" value={incident.location?.lng} mono />
@@ -81,17 +87,17 @@ export default function IncidentDetailsPage({ incidentId, authority, onBack, onN
                   </div>
                 </div>
 
-                <div className="cm-glass-panel p-5">
-                  <div className="text-[11px] uppercase tracking-wider text-[color:var(--cm-text-muted)] font-medium mb-3">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-5">
+                  <div className="text-[11px] uppercase tracking-wider text-[color:#9ca3af] font-medium mb-3">
                     AI Recommendation
                   </div>
-                  <div className="text-[13px] text-[color:var(--cm-text-secondary)]">
-                    Priority: <strong style={{ color: 'var(--cm-text-primary)' }}>{titleCase(incident.severity)}</strong> ·
-                    Confidence: <strong style={{ color: 'var(--cm-text-primary)' }}>
+                  <div className="text-[13px] text-[color:#d1d5db]">
+                    Priority: <strong >{titleCase(incident.severity)}</strong> ·
+                    Confidence: <strong >
                       {incident.aiConfidence !== undefined ? `${Math.round(incident.aiConfidence * 100)}%` : '—'}
                     </strong>
                   </div>
-                  <div className="text-[11px] uppercase tracking-wider text-[color:var(--cm-text-muted)] font-medium mt-3">
+                  <div className="text-[11px] uppercase tracking-wider text-[color:#9ca3af] font-medium mt-3">
                     Human Authority
                   </div>
                   <div className="text-[13px] mt-1">
@@ -99,27 +105,27 @@ export default function IncidentDetailsPage({ incidentId, authority, onBack, onN
                   </div>
                 </div>
 
-                <div className="cm-glass-panel p-5">
-                  <div className="text-[11px] uppercase tracking-wider text-[color:var(--cm-text-muted)] font-medium mb-3">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-5">
+                  <div className="text-[11px] uppercase tracking-wider text-[color:#9ca3af] font-medium mb-3">
                     Raw Reports ({reports.length})
                   </div>
                   <div className="flex flex-col gap-3">
                     {reports.map((r) => (
-                      <div key={r.id} className="border border-[color:var(--cm-border)] rounded-md p-3">
+                      <div key={r.id} className="border border-[color:#374151] rounded-md p-3">
                         <div className="flex items-center justify-between mb-1">
                           <span
-                            className="cm-mono text-[10px] px-1.5 py-0.5 rounded"
-                            style={{ background: 'var(--cm-bg-panel-raised)', border: '1px solid var(--cm-border-strong)' }}
+                            className="font-mono text-[10px] px-1.5 py-0.5 rounded"
+                            
                           >
                             {SOURCE_LABELS[r.source] || r.source}
                           </span>
-                          <span className="text-[11px] text-[color:var(--cm-text-muted)]">{relativeTime(r.createdAt)}</span>
+                          <span className="text-[11px] text-[color:#9ca3af]">{relativeTime(r.createdAt)}</span>
                         </div>
-                        <p className="text-[13px] text-[color:var(--cm-text-secondary)]">{r.text}</p>
-                        {r.hasMedia && <span className="text-[11px] text-[color:var(--cm-info)] mt-1 inline-block">📎 Media attached</span>}
+                        <p className="text-[13px] text-[color:#d1d5db]">{r.text}</p>
+                        {r.hasMedia && <span className="text-[11px] text-[color:#3b82f6] mt-1 inline-block">📎 Media attached</span>}
                       </div>
                     ))}
-                    {reports.length === 0 && <div className="text-[13px] text-[color:var(--cm-text-muted)]">No reports loaded for this incident.</div>}
+                    {reports.length === 0 && <div className="text-[13px] text-[color:#9ca3af]">No reports loaded for this incident.</div>}
                   </div>
                 </div>
               </div>
@@ -127,7 +133,7 @@ export default function IncidentDetailsPage({ incidentId, authority, onBack, onN
               <div className="flex flex-col gap-5">
                 <AuthorityActionPanel incident={incident} onChangeStatus={handleChangeStatus} onAddNote={handleAddNote} busy={busy} />
 
-                <div className="cm-glass-panel p-5">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-5">
                   <div className="flex items-center gap-2 mb-3">
                     <TabButton active={historyTab === 'timeline'} onClick={() => setHistoryTab('timeline')}>Timeline</TabButton>
                     <TabButton active={historyTab === 'audit'} onClick={() => setHistoryTab('audit')}>Audit Log</TabButton>
@@ -147,8 +153,8 @@ export default function IncidentDetailsPage({ incidentId, authority, onBack, onN
 function Field({ label, value, mono }) {
   return (
     <div>
-      <div className="text-[11px] text-[color:var(--cm-text-muted)]">{label}</div>
-      <div className={mono ? 'cm-mono' : ''}>{value ?? '—'}</div>
+      <div className="text-[11px] text-[color:#9ca3af]">{label}</div>
+      <div className={mono ? 'font-mono' : ''}>{value ?? '—'}</div>
     </div>
   );
 }
@@ -158,7 +164,7 @@ function TabButton({ active, onClick, children }) {
     <button
       onClick={onClick}
       className={`px-2.5 py-1.5 rounded-md text-[12px] font-medium ${
-        active ? 'bg-[color:var(--cm-bg-panel-raised)] border border-[color:var(--cm-border-strong)]' : 'text-[color:var(--cm-text-secondary)]'
+        active ? 'bg-[color:#1f2937] border border-[color:#374151]' : 'text-[color:#d1d5db]'
       }`}
     >
       {children}
