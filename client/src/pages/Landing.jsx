@@ -35,7 +35,7 @@ export default function Landing() {
             <Shield className="h-5 w-5 text-[#C0392B]" />
             <span className="text-sm font-semibold tracking-tight">CrisisMap AI</span>
           </div>
-          <button onClick={() => navigate("/dashboard")}
+          <button onClick={() => navigate("/authority/dashboard")}
             className="flex items-center gap-2 px-4 py-2 text-xs font-medium rounded-lg bg-[#C0392B] text-white hover:bg-[#C0392B]/90 transition-colors"
           >
             Open Command Center
@@ -59,7 +59,7 @@ export default function Landing() {
             Track incidents, coordinate volunteers, and prioritize response — all in real time.
           </p>
           <div className="mt-10 flex items-center justify-center gap-4">
-            <button onClick={() => navigate("/dashboard")}
+            <button onClick={() => navigate("/authority/dashboard")}
               className="flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-xl bg-[#C0392B] text-white hover:bg-[#C0392B]/90 transition-all shadow-lg shadow-[#C0392B]/20"
             >
               Open Command Center
@@ -123,7 +123,7 @@ export default function Landing() {
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Ready to get started?</h2>
           <p className="mt-3 text-sm text-white/40">Sign in to open the command center and see your team's disaster severity map in real time.</p>
-          <button onClick={() => navigate("/dashboard")}
+          <button onClick={() => navigate("/authority/dashboard")}
             className="mt-8 inline-flex items-center gap-2 px-8 py-3.5 text-sm font-semibold rounded-xl bg-[#C0392B] text-white hover:bg-[#C0392B]/90 transition-all shadow-lg shadow-[#C0392B]/20"
           >
             Open Command Center

@@ -13,7 +13,7 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/dashboard'); // Go to dashboard on success
+      navigate('/authority/dashboard'); // Go to dashboard on success
     } catch (err) {
       setError("Invalid email or password. Please try again.");
     }

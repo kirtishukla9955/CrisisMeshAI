@@ -22,8 +22,12 @@ export default function IncidentDetailsPage({ authority }) {
   const [toast, setToast] = useState(null);
   const [historyTab, setHistoryTab] = useState('timeline'); // 'timeline' | 'audit'
 
-  const onBack = () => navigate('/dashboard');
-  const onNavigate = (path) => navigate(path);
+  const onBack = () => navigate('/authority/dashboard');
+  const onNavigate = (key) => {
+    if (key === 'command-center') navigate('/authority/dashboard');
+    else if (key === 'ai-reports') navigate('/authority/reports');
+    else navigate(`/authority/${key}`);
+  };
 
   const handleChangeStatus = async (status, authorityNote) => {
     setBusy(true);

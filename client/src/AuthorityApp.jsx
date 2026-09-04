@@ -39,10 +39,10 @@ export default function AuthorityApp() {
       <Suspense fallback={<RouteLoading />}>
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/login" element={authority ? <Navigate to="/dashboard" /> : <LoginPage />} />
-          <Route path="/dashboard" element={authority ? <CommandCenterPage authority={authority} /> : <Navigate to="/login" />} />
-          <Route path="/incidents/:id" element={authority ? <IncidentDetailsPage authority={authority} /> : <Navigate to="/login" />} />
-          <Route path="/reports" element={authority ? <PostDisasterPage authority={authority} /> : <Navigate to="/login" />} />
+          <Route path="/login" element={authority ? <Navigate to="/authority/dashboard" /> : <LoginPage />} />
+          <Route path="/dashboard" element={authority ? <CommandCenterPage authority={authority} /> : <Navigate to="/authority/login" />} />
+          <Route path="/incidents/:id" element={authority ? <IncidentDetailsPage authority={authority} /> : <Navigate to="/authority/login" />} />
+          <Route path="/reports" element={authority ? <PostDisasterPage authority={authority} /> : <Navigate to="/authority/login" />} />
           <Route
             path="*"
             element={

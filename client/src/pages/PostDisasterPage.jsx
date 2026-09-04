@@ -9,7 +9,11 @@ import { useNavigate } from 'react-router-dom';
 
 export default function PostDisasterPage({ authority }) {
   const navigate = useNavigate();
-  const onNavigate = (path) => navigate(path);
+  const onNavigate = (key) => {
+    if (key === 'command-center') navigate('/authority/dashboard');
+    else if (key === 'ai-reports') navigate('/authority/reports');
+    else navigate(`/authority/${key}`);
+  };
   const { report, loading, generating, generate } = usePostDisasterReport();
   const [toast, setToast] = useState(null);
 
