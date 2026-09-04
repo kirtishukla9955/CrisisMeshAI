@@ -114,7 +114,7 @@ export default function PriorityQueuePage({ authority }) {
                             </span>
                             <span>&bull;</span>
                             <span className="uppercase text-[#E67E22] font-semibold tracking-wider">
-                              {incident.status.replace(/_/g, ' ')}
+                              {(incident.status || 'unknown').replace(/_/g, ' ')}
                             </span>
                           </div>
                         </div>
